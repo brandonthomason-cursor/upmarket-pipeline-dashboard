@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Upmarket Pipeline Dashboard - Coda Embed</title>
+    <!-- Allow embedding in iframes (required for Coda) -->
+    <meta http-equiv="X-Frame-Options" content="ALLOW-FROM *">
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors *;">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Coda-optimized styles - cleaner, more compact */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: transparent;
+            color: #2c3e50;
+            padding: 10px;
+        }
+        
+        .dashboard-container {
+            max-width: 100%;
+            padding: 0;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .target-section {
+            margin-bottom: 20px;
+        }
+        
+        .target-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .target-amount {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        .data-table th {
+            padding: 10px;
+            text-align: left;
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .data-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-referral {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .badge-managed {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-risk {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-ready {
+            background: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>2026 Upmarket Pipeline Dashboard</h1>
+            <div style="font-size: 12px; opacity: 0.9;">
+                Last Updated: <span id="lastUpdated"></span>
+            </div>
+        </header>
+
+        <!-- Summary Metrics -->
+        <section class="metrics-section">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Total Opportunities</div>
+                    <div class="metric-value" id="totalOpportunities">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Closed Won</div>
+                    <div class="metric-value success" id="closedWonDeals">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Pipeline Value</div>
+                    <div class="metric-value" id="totalPipelineValue">$0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Weighted Pipeline</div>
+                    <div class="metric-value" id="weightedPipelineValue">$0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partner Chart -->
+        <section class="chart-section">
+            <div class="chart-container">
+                <canvas id="partnerChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Active Opportunities (Compact) -->
+        <section class="opportunities-section">
+            <h2 style="margin-bottom: 15px; font-size: 18px;">Active Opportunities</h2>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Partner</th>
+                            <th>Stage</th>
+                            <th>Deal Size</th>
+                            <th>AE</th>
+                            <th>Risk</th>
+                        </tr>
+                    </thead>
+                    <tbody id="opportunitiesTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 20px;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Dashboard data
+        let dashboardData = {
+            summaryMetrics: {},
+            activeOpportunities: [],
+            partnerPerformance: {}
+        };
+
+        // Initialize for Coda embed
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLastUpdated();
+            loadDashboardData();
+        });
+
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = now.toLocaleString();
+        }
+
+        function loadDashboardData() {
+            // Check config for API URL or static data
+            const apiUrl = typeof CONFIG !== 'undefined' && CONFIG.API_URL 
+                ? CONFIG.API_URL 
+                : '/api/dashboard-data';
+            const useStaticData = typeof CONFIG !== 'undefined' && CONFIG.USE_STATIC_DATA;
+            const dataFile = typeof CONFIG !== 'undefined' && CONFIG.DATA_FILE 
+                ? CONFIG.DATA_FILE 
+                : 'data.json';
+            
+            if (useStaticData) {
+                // Load from static data.json
+                fetch(dataFile)
+                    .then(response => response.json())
+                    .then(data => {
+                        dashboardData = data;
+                        renderDashboard();
+                    })
+                    .catch(error => {
+                        console.log('Error loading data.json:', error);
+                        loadSampleData();
+                        renderDashboard();
+                    });
+            } else {
+                // Load from API endpoint
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        dashboardData = data;
+                        renderDashboard();
+                    })
+                    .catch(error => {
+                        console.log('Error loading from API:', error);
+                        // Try data.json as fallback
+                        fetch(dataFile)
+                            .then(r => r.json())
+                            .then(data => {
+                                dashboardData = data;
+                                renderDashboard();
+                            })
+                            .catch(() => {
+                                loadSampleData();
+                                renderDashboard();
+                            });
+                    });
+            }
+        }
+
+        function loadSampleData() {
+            dashboardData = {
+                summaryMetrics: {
+                    totalOpportunities: 15,
+                    closedWonDeals: 3,
+                    totalPipelineValue: 1800000,
+                    weightedPipelineValue: 720000
+                },
+                activeOpportunities: [
+                    {opportunityName: 'Enterprise Corp Deal', partner: 'XrayTech', stage: 'Proposal', dealSize: 250000, ae: 'Emily Misurec', risk: null},
+                    {opportunityName: 'MidMarket Solutions', partner: 'Pyxis', stage: 'Discovery', dealSize: 80000, ae: null, risk: 'Low Activity'}
+                ],
+                partnerPerformance: {
+                    'XrayTech': {pipeline: 400000, closedWon: 250000},
+                    'Pyxis': {pipeline: 280000, closedWon: 200000}
+                }
+            };
+        }
+
+        function renderDashboard() {
+            renderSummaryMetrics();
+            renderPartnerChart();
+            renderActiveOpportunitiesCompact();
+        }
+
+        function renderSummaryMetrics() {
+            const m = dashboardData.summaryMetrics;
+            document.getElementById('totalOpportunities').textContent = m.totalOpportunities || 0;
+            document.getElementById('closedWonDeals').textContent = m.closedWonDeals || 0;
+            document.getElementById('totalPipelineValue').textContent = formatCurrency(m.totalPipelineValue || 0);
+            document.getElementById('weightedPipelineValue').textContent = formatCurrency(m.weightedPipelineValue || 0);
+        }
+
+        function renderPartnerChart() {
+            const ctx = document.getElementById('partnerChart').getContext('2d');
+            const partners = Object.keys(dashboardData.partnerPerformance || {});
+            const pipelineData = partners.map(p => dashboardData.partnerPerformance[p].pipeline || 0);
+            const closedWonData = partners.map(p => dashboardData.partnerPerformance[p].closedWon || 0);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: partners,
+                    datasets: [
+                        {
+                            label: 'Pipeline',
+                            data: pipelineData,
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)'
+                        },
+                        {
+                            label: 'Closed Won',
+                            data: closedWonData,
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderActiveOpportunitiesCompact() {
+            const tbody = document.getElementById('opportunitiesTableBody');
+            tbody.innerHTML = '';
+
+            const opportunities = (dashboardData.activeOpportunities || []).slice(0, 10);
+            
+            if (opportunities.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No opportunities found</td></tr>';
+                return;
+            }
+            
+            opportunities.forEach(opp => {
+                const row = tbody.insertRow();
+                const riskBadge = opp.risk ? `<span class="badge badge-risk">${opp.risk}</span>` : '-';
+                row.innerHTML = `
+                    <td>${opp.opportunityName || ''}</td>
+                    <td>${opp.partner || ''}</td>
+                    <td>${opp.stage || ''}</td>
+                    <td>${formatCurrency(opp.dealSize || 0)}</td>
+                    <td>${opp.ae || '-'}</td>
+                    <td>${riskBadge}</td>
+                `;
+            });
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+    </script>
+</body>
+</html>
+
