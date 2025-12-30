@@ -1,20 +1,20 @@
-# Manual Workflow Upload - Quick Guide
+# Fix GitHub Actions Workflow Failures
 
-Since the token doesn't have Contents permission, upload the workflow file manually via GitHub web UI.
+## Problem
+The workflow is triggering on **every push** to `gh-pages`, causing constant failures and email spam.
 
-## Steps (2 minutes)
+## Solution
+Update the workflow to only trigger when relevant files change, and add missing dependencies.
+
+## Steps to Fix
 
 1. **Go to**: https://github.com/brandonthomason-cursor/upmarket-pipeline-dashboard
-2. **Switch to `gh-pages` branch** (dropdown at top left)
-3. **Click**: "Add file" → "Create new file"
-4. **Enter path**: `.github/workflows/update-dashboard-data.yml`
-   - GitHub will create the `.github/workflows/` directories automatically
-5. **Copy and paste** the entire contents below into the file editor
-6. **Click**: "Commit new file" (at bottom)
+2. **Navigate to**: `.github/workflows/update-dashboard-data.yml`
+3. **Click**: "Edit" (pencil icon)
+4. **Replace the entire file** with the content below
+5. **Click**: "Commit changes"
 
-## Workflow File Contents
-
-Copy everything below:
+## Fixed Workflow Content
 
 ```yaml
 name: Update Dashboard Data
@@ -25,39 +25,54 @@ on:
     - cron: '0 */6 * * *'
   # Allow manual trigger
   workflow_dispatch:
-  # Run on push to main branch
+  # Only run on push if relevant files change (prevents spam)
   push:
     branches:
-      - main
       - gh-pages
+    paths:
+      - 'scripts/**'
+      - 'sql/**'
+      - '.github/workflows/update-dashboard-data.yml'
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
       - name: Install dependencies
         run: |
-          pip install databricks-sdk python-dotenv
+          pip install --quiet databricks-sdk python-dotenv requests pynacl
       
       - name: Check SQL directory
         run: |
-          # Check if SQL directory exists in repo
           if [ -d "sql" ]; then
-            echo "SQL directory found"
-            ls -la sql/
+            echo "✅ SQL directory found"
+            ls -la sql/ | head -10
           else
-            echo "SQL directory not found - will need to be added to repo"
+            echo "❌ SQL directory not found"
+            exit 1
+          fi
+      
+      - name: Check scripts directory
+        run: |
+          if [ -f "scripts/update_data.py" ]; then
+            echo "✅ Update script found"
+          else
+            echo "❌ Update script not found"
+            exit 1
           fi
       
       - name: Update dashboard data
@@ -66,27 +81,41 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
           DATABRICKS_SQL_WAREHOUSE_ID: ${{ secrets.DATABRICKS_SQL_WAREHOUSE_ID }}
         run: |
-          python scripts/update_data.py || echo "Update script failed, using existing data.json"
+          python3 scripts/update_data.py
       
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add data.json
-          git diff --staged --quiet || git commit -m "Update dashboard data - $(date +'%Y-%m-%d %H:%M:%S')"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update dashboard data - $(date +'%Y-%m-%d %H:%M:%S UTC')"
+            git push
+          fi
 ```
 
-## After Uploading
+## What This Fixes
 
-1. **Test the workflow**:
-   - Go to: https://github.com/brandonthomason-cursor/upmarket-pipeline-dashboard/actions
-   - Click "Update Dashboard Data"
-   - Click "Run workflow" → "Run workflow"
+1. ✅ **Stops email spam**: Only triggers on relevant file changes, not every push
+2. ✅ **Adds missing dependencies**: `requests` and `pynacl` (needed by the script)
+3. ✅ **Better error handling**: Checks for files before running
+4. ✅ **Proper permissions**: Uses GITHUB_TOKEN for git push
+5. ✅ **Updated actions**: Uses latest action versions
 
-2. **It will run automatically every 6 hours** after that!
+## After Updating
 
-## That's It!
+The workflow will:
+- ✅ Run automatically every 6 hours (scheduled)
+- ✅ Run manually when you click "Run workflow"
+- ✅ Only run on push if scripts/SQL/workflow files change
+- ✅ Stop spamming you with emails on every file upload
 
-No token permissions needed - this uses the GitHub web UI which you already have access to.
+## To Stop Current Failures
+
+You can also **disable email notifications** for workflow failures:
+1. Go to: https://github.com/settings/notifications
+2. Scroll to "Actions"
+3. Uncheck "Email" for workflow failures (or customize)
 
