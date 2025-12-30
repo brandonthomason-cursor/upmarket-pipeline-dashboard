@@ -85,6 +85,61 @@ def transform_to_dashboard_format(opportunities, closed_won, summary, bob_overla
         'longSalesCycle': int(summary.get('long_sales_cycle_count', 0) or 0)
     }
     
+    # Calculate pipeline progression metrics from opportunities
+    stage_mapping = {
+        'qualified': ['Qualified', 'Qualification'],
+        'discovery': ['Discovery', 'Discovery Call', 'Discovery Meeting'],
+        'proposal': ['Proposal', 'Proposal Sent', 'Proposal/Price Quote'],
+        'negotiation': ['Negotiation', 'Negotiation/Review', 'Contract Sent']
+    }
+    
+    qualified_count = 0
+    qualified_value = 0.0
+    discovery_count = 0
+    discovery_value = 0.0
+    proposal_count = 0
+    proposal_value = 0.0
+    negotiation_count = 0
+    negotiation_value = 0.0
+    
+    for opp in active_opportunities:
+        stage = str(opp.get('stage', '')).lower()
+        deal_size = opp.get('dealSize', 0)
+        weighted_value = opp.get('weightedValue', 0)
+        
+        if any(s in stage for s in stage_mapping['qualified']):
+            qualified_count += 1
+            qualified_value += weighted_value
+        elif any(s in stage for s in stage_mapping['discovery']):
+            discovery_count += 1
+            discovery_value += weighted_value
+        elif any(s in stage for s in stage_mapping['proposal']):
+            proposal_count += 1
+            proposal_value += weighted_value
+        elif any(s in stage for s in stage_mapping['negotiation']):
+            negotiation_count += 1
+            negotiation_value += weighted_value
+    
+    # Add pipeline progression metrics
+    summary_metrics.update({
+        'qualifiedCount': qualified_count,
+        'qualifiedValue': qualified_value,
+        'discoveryCount': discovery_count,
+        'discoveryValue': discovery_value,
+        'proposalCount': proposal_count,
+        'proposalValue': proposal_value,
+        'negotiationCount': negotiation_count,
+        'negotiationValue': negotiation_value,
+        # Conversion rates (calculate from closed won vs qualified/discovery)
+        'qualifiedToWonRate': (summary_metrics['closedWonDeals'] / max(qualified_count, 1)) * 100 if qualified_count > 0 else 0.0,
+        'discoveryToWonRate': (summary_metrics['closedWonDeals'] / max(discovery_count, 1)) * 100 if discovery_count > 0 else 0.0,
+        'pipelineConversionRate': (summary_metrics['closedWonDeals'] / max(summary_metrics['totalOpportunities'], 1)) * 100 if summary_metrics['totalOpportunities'] > 0 else 0.0,
+        # Pacing metrics (assuming Q1 target = $2M, 13 weeks)
+        'pipelinePacingPercent': (summary_metrics['weightedPipelineValue'] / 2000000.0) * 100.0,
+        'activityPacingPercent': 0.0,  # Placeholder - needs activity data
+        'dealVelocity': summary_metrics['totalOpportunities'] / 13.0 if summary_metrics['totalOpportunities'] > 0 else 0.0
+    })
+    
     # Transform BoB overlaps
     bob_overlaps_list = []
     for overlap in bob_overlaps:
@@ -193,3 +248,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
