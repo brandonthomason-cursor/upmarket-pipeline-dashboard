@@ -8,11 +8,25 @@
     "weightedPipelineValue": 0.0,
     "avgDealSize": 0.0,
     "stalledDeals": 0,
-    "longSalesCycle": 0
+    "longSalesCycle": 0,
+    "qualifiedCount": 0,
+    "qualifiedValue": 0.0,
+    "discoveryCount": 0,
+    "discoveryValue": 0.0,
+    "proposalCount": 0,
+    "proposalValue": 0.0,
+    "negotiationCount": 0,
+    "negotiationValue": 0.0,
+    "qualifiedToWonRate": 0.0,
+    "discoveryToWonRate": 0.0,
+    "pipelineConversionRate": 0.0,
+    "pipelinePacingPercent": 0.0,
+    "activityPacingPercent": 0.0,
+    "dealVelocity": 0.0
   },
   "closedWonDeals": [],
   "activeOpportunities": [],
   "bobOverlaps": [],
   "partnerPerformance": {},
-  "lastUpdated": "2025-12-30T15:29:47.172178"
+  "lastUpdated": "2025-12-30T15:47:24.705955"
 }
