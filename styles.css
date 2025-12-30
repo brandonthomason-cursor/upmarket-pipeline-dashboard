@@ -318,6 +318,44 @@ body {
     padding: 40px !important;
 }
 
+.empty-state {
+    padding: 40px 20px !important;
+    text-align: center;
+}
+
+.empty-message {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 2px dashed #cbd5e1;
+}
+
+.empty-message strong {
+    display: block;
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 15px;
+}
+
+.empty-subtext {
+    display: block;
+    font-size: 14px;
+    color: #64748b;
+    text-align: left;
+    line-height: 1.8;
+}
+
+.empty-subtext ul {
+    margin: 15px 0 15px 20px;
+    text-align: left;
+}
+
+.empty-subtext li {
+    margin: 8px 0;
+}
+
 /* Badges */
 .badge {
     display: inline-block;
