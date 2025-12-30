@@ -9,8 +9,8 @@ const CONFIG = {
     // Set to true to use GitHub Actions (recommended - completely free!)
     USE_STATIC_DATA: true,
     
-    // Static data file path (relative to index.html)
-    DATA_FILE: 'data.json',
+    // Static data file path (use absolute URL for Coda embed)
+    DATA_FILE: 'https://brandonthomason-cursor.github.io/upmarket-pipeline-dashboard/data.json',
     
     // Fallback to sample data if API/data.json fails
     USE_SAMPLE_DATA_ON_ERROR: true,
