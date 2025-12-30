@@ -1,0 +1,92 @@
+# Manual Workflow Upload - Quick Guide
+
+Since the token doesn't have Contents permission, upload the workflow file manually via GitHub web UI.
+
+## Steps (2 minutes)
+
+1. **Go to**: https://github.com/brandonthomason-cursor/upmarket-pipeline-dashboard
+2. **Switch to `gh-pages` branch** (dropdown at top left)
+3. **Click**: "Add file" → "Create new file"
+4. **Enter path**: `.github/workflows/update-dashboard-data.yml`
+   - GitHub will create the `.github/workflows/` directories automatically
+5. **Copy and paste** the entire contents below into the file editor
+6. **Click**: "Commit new file" (at bottom)
+
+## Workflow File Contents
+
+Copy everything below:
+
+```yaml
+name: Update Dashboard Data
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  # Allow manual trigger
+  workflow_dispatch:
+  # Run on push to main branch
+  push:
+    branches:
+      - main
+      - gh-pages
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install databricks-sdk python-dotenv
+      
+      - name: Check SQL directory
+        run: |
+          # Check if SQL directory exists in repo
+          if [ -d "sql" ]; then
+            echo "SQL directory found"
+            ls -la sql/
+          else
+            echo "SQL directory not found - will need to be added to repo"
+          fi
+      
+      - name: Update dashboard data
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          DATABRICKS_SQL_WAREHOUSE_ID: ${{ secrets.DATABRICKS_SQL_WAREHOUSE_ID }}
+        run: |
+          python scripts/update_data.py || echo "Update script failed, using existing data.json"
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data.json
+          git diff --staged --quiet || git commit -m "Update dashboard data - $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
+```
+
+## After Uploading
+
+1. **Test the workflow**:
+   - Go to: https://github.com/brandonthomason-cursor/upmarket-pipeline-dashboard/actions
+   - Click "Update Dashboard Data"
+   - Click "Run workflow" → "Run workflow"
+
+2. **It will run automatically every 6 hours** after that!
+
+## That's It!
+
+No token permissions needed - this uses the GitHub web UI which you already have access to.
+
