@@ -406,6 +406,42 @@ body {
     color: #6b7280;
 }
 
+/* Domain summary pills */
+.domain-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.summary-pill {
+    padding: 6px 10px;
+    background: #eef2ff;
+    color: #312e81;
+    border-radius: 12px;
+    font-size: 12px;
+    border: 1px solid #c7d2fe;
+}
+
+/* Status coloring for funnel table */
+.data-table td.status-active,
+.data-table td.status-next,
+.data-table td.status-queued {
+    font-weight: 600;
+}
+
+.data-table td.status-active {
+    color: #065f46;
+}
+
+.data-table td.status-next {
+    color: #92400e;
+}
+
+.data-table td.status-queued {
+    color: #334155;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .dashboard-header {

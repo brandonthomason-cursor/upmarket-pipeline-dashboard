@@ -1,626 +1,365 @@
-// 2026 Upmarket Pipeline and Revenue Dashboard - JavaScript
+// Upmarket Pipeline Focus - minimal, one-at-a-time view
+let dashboardData = {};
 
-// Sample data structure (replace with actual data from SQL queries)
-let dashboardData = {
-    quarterlyTarget: 2000000,
-    summaryMetrics: {
-        totalOpportunities: 0,
-        closedWonDeals: 0,
-        closedWonRevenue: 0,
-        totalPipelineValue: 0,
-        weightedPipelineValue: 0,
-        avgDealSize: 0,
-        stalledDeals: 0,
-        longSalesCycle: 0,
-        // Pipeline Progression Metrics
-        qualifiedCount: 0,
-        discoveryCount: 0,
-        proposalCount: 0,
-        negotiationCount: 0,
-        qualifiedValue: 0,
-        discoveryValue: 0,
-        proposalValue: 0,
-        negotiationValue: 0,
-        qualifiedToWonRate: 0,
-        discoveryToWonRate: 0,
-        pipelineConversionRate: 0,
-        // Pacing Metrics
-        pipelinePacingPercent: 0,
-        activityPacingPercent: 0,
-        dealVelocity: 0,
-        // Most Important Metrics (with trends)
-        qualifiedPipelineTrend: '--',
-        conversionRateTrend: '--',
-        pacingTrend: '--',
-        activityPacingTrend: '--'
-    },
-    closedWonDeals: [],
-    activeOpportunities: [],
-    bobOverlaps: [],
-    partnerPerformance: {}
-};
-
-// Initialize dashboard
-document.addEventListener('DOMContentLoaded', function() {
-    updateLastUpdated();
-    // Load sample data immediately (works with file:// protocol)
+document.addEventListener('DOMContentLoaded', () => {
     loadSampleData();
     renderDashboard();
-    // Try to load from data.json if available (requires HTTP server)
     loadDashboardData();
 });
 
-// Update last updated timestamp
-function updateLastUpdated() {
-    const now = new Date();
-    document.getElementById('lastUpdated').textContent = now.toLocaleString();
+function updateLastUpdated(ts) {
+    const time = ts ? new Date(ts) : new Date();
+    document.getElementById('lastUpdated').textContent = time.toLocaleString();
 }
 
-// Load dashboard data
 function loadDashboardData() {
-    // Check if config is available (for GitHub Pages setup)
-    const apiUrl = typeof CONFIG !== 'undefined' && CONFIG.API_URL 
-        ? CONFIG.API_URL 
-        : '/api/dashboard-data'; // Default to relative path for Flask server
-    
-    const useStaticData = typeof CONFIG !== 'undefined' && CONFIG.USE_STATIC_DATA;
-    const dataFile = typeof CONFIG !== 'undefined' && CONFIG.DATA_FILE 
-        ? CONFIG.DATA_FILE 
-        : 'data.json';
-    
-    if (useStaticData) {
-        // Load from static data.json file (GitHub Actions approach)
-        fetch(dataFile)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('data.json not found');
-            })
-            .then(data => {
-                console.log('Loaded data from data.json');
-                dashboardData = data;
-                renderDashboard();
-            })
-            .catch(error => {
-                console.log('Error loading data.json:', error);
-                if (typeof CONFIG !== 'undefined' && CONFIG.USE_SAMPLE_DATA_ON_ERROR) {
-                    loadSampleData();
-                    renderDashboard();
-                }
-            });
-    } else {
-        // Try to load from API endpoint (live data)
-        fetch(apiUrl)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                // If API fails, try data.json file as fallback
-                if (!apiUrl.startsWith('/')) {
-                    // Only try data.json if using external API
-                    return fetch(dataFile).then(r => r.ok ? r.json() : Promise.reject());
-                }
-                throw new Error('API request failed');
-            })
-            .then(data => {
-                console.log('Loaded live data from API');
-                dashboardData = data;
-                renderDashboard();
-            })
-            .catch(error => {
-                console.log('Error loading from API:', error);
-                // Fallback to sample data
-                if (typeof CONFIG !== 'undefined' && CONFIG.USE_SAMPLE_DATA_ON_ERROR) {
-                    loadSampleData();
-                    renderDashboard();
-                }
-            });
-    }
-    
-    // Set up auto-refresh if configured
-    if (typeof CONFIG !== 'undefined' && CONFIG.AUTO_REFRESH_INTERVAL > 0) {
-        setInterval(loadDashboardData, CONFIG.AUTO_REFRESH_INTERVAL);
-    }
+    const apiUrl = typeof CONFIG !== 'undefined' && CONFIG.API_URL ? CONFIG.API_URL : null;
+    const useStatic = typeof CONFIG !== 'undefined' && CONFIG.USE_STATIC_DATA;
+    const dataFile = typeof CONFIG !== 'undefined' && CONFIG.DATA_FILE ? CONFIG.DATA_FILE : 'data.json';
+
+    if (!apiUrl && !useStatic) return;
+
+    const source = useStatic ? dataFile : apiUrl;
+    fetch(source)
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(data => {
+            dashboardData = data;
+            renderDashboard();
+        })
+        .catch(() => {
+            // keep sample data if fetch fails
+        });
 }
 
-// Load sample data for POC
+// Sample data aligned to the simplified layout
 function loadSampleData() {
     dashboardData = {
-        quarterlyTarget: 2000000,
-        summaryMetrics: {
-            totalOpportunities: 15,
-            closedWonDeals: 3,
-            closedWonRevenue: 450000,
-            totalPipelineValue: 1800000,
-            weightedPipelineValue: 720000,
-            avgDealSize: 120000,
-            stalledDeals: 2,
-            longSalesCycle: 1,
-            // Pipeline Progression Metrics
-            qualifiedCount: 5,
-            discoveryCount: 4,
-            proposalCount: 2,
-            negotiationCount: 1,
-            qualifiedValue: 250000,
-            discoveryValue: 300000,
-            proposalValue: 150000,
-            negotiationValue: 100000,
-            qualifiedToWonRate: 15.0,
-            discoveryToWonRate: 25.0,
-            pipelineConversionRate: 18.5,
-            // Pacing Metrics
-            pipelinePacingPercent: 16.0,
-            activityPacingPercent: 85.0,
-            dealVelocity: 2.5,
-            // Most Important Metrics (with trends)
-            qualifiedPipelineTrend: '↑ +2 this week',
-            conversionRateTrend: '↑ +2.5%',
-            pacingTrend: '↑ On track',
-            activityPacingTrend: '↑ +5%'
+        quarterlyTarget: 20000,
+        summary: {
+            closedWon: 5000,
+            activeCount: 2,
+            weightedPipeline: 12000
         },
-        closedWonDeals: [
+        partners: [
             {
-                opportunityName: 'Acme Corp Expansion',
-                partner: 'XrayTech',
-                account: 'acme.com',
-                dealSize: 150000,
-                closeDate: '2026-01-15',
-                salesCycleDays: 45,
-                ae: 'Emily Misurec',
-                inBob: true
+                name: 'Xray Tech',
+                owner: 'Brandon',
+                active: {
+                    account: 'Enterprise Corp',
+                    stage: 'Proposal',
+                    dealSize: 12000,
+                    weightedValue: 6000,
+                    lastActivity: '2025-12-22',
+                    nextAction: 'Pricing review on Jan 6',
+                    status: 'On track'
+                },
+                backlog: [
+                    { account: 'Global Solutions', stage: 'Qualified', priority: 1 },
+                    { account: 'FinServe Co', stage: 'Discovery', priority: 2 }
+                ],
+                weeklyNote: 'Met pre-holidays; CFO review pending; schedule exec sponsor call week of Jan 6.',
+                submittedDomains: [
+                    { account: 'Enterprise Corp', domain: 'enterprisecorp.com', status: 'active', stage: 'Proposal', priority: 1, lastActivity: '2025-12-22', note: 'Pricing review Jan 6' },
+                    { account: 'Global Solutions', domain: 'globalsolutions.com', status: 'next', stage: 'Qualified', priority: 2, lastActivity: '2025-12-18', note: 'Queued next' },
+                    { account: 'FinServe Co', domain: 'finserve.co', status: 'next', stage: 'Discovery', priority: 3, lastActivity: '2025-12-17', note: 'Discovery prep' },
+                    { account: 'HealthSoft', domain: 'healthsoft.io', status: 'queued', stage: 'Unscreened', priority: 4, lastActivity: null, note: '' },
+                    { account: 'Apollo Global', domain: 'apollo.com', status: 'queued', stage: 'Unscreened', priority: 5, lastActivity: null, note: '' },
+                    { account: 'CCAHA', domain: 'ccaha.org', status: 'queued', stage: 'Unscreened', priority: 6, lastActivity: null, note: '' },
+                    { account: 'Level Agency', domain: 'level.agency', status: 'queued', stage: 'Unscreened', priority: 7, lastActivity: null, note: '' },
+                    { account: 'MediData', domain: 'medidata.com', status: 'queued', stage: 'Unscreened', priority: 8, lastActivity: null, note: '' },
+                    { account: 'Coding Clarified', domain: '', status: 'queued', stage: 'Unscreened', priority: 9, lastActivity: null, note: '' },
+                    { account: 'SEM Rush', domain: 'semrush.com', status: 'queued', stage: 'Unscreened', priority: 10, lastActivity: null, note: '' },
+                    { account: 'Try Penny', domain: 'trypennie.com', status: 'queued', stage: 'Unscreened', priority: 11, lastActivity: null, note: '' },
+                    { account: 'Boston BioPr', domain: '', status: 'queued', stage: 'Unscreened', priority: 12, lastActivity: null, note: '' },
+                    { account: 'US Pet Food', domain: 'uspetfood.com', status: 'queued', stage: 'Unscreened', priority: 13, lastActivity: null, note: '' },
+                    { account: 'Journey Live', domain: 'journey.live', status: 'queued', stage: 'Unscreened', priority: 14, lastActivity: null, note: '' },
+                    { account: 'SoloMID', domain: 'solomid.net', status: 'queued', stage: 'Unscreened', priority: 15, lastActivity: null, note: '' },
+                    { account: "Ben & Jerry's", domain: '', status: 'queued', stage: 'Unscreened', priority: 16, lastActivity: null, note: '' },
+                    { account: "O'Reilly Media", domain: 'oreilly.com', status: 'queued', stage: 'Unscreened', priority: 17, lastActivity: null, note: '' },
+                    { account: 'Green Check', domain: '', status: 'queued', stage: 'Unscreened', priority: 18, lastActivity: null, note: '' },
+                    { account: 'S&S Activewear', domain: 'ssactivewear.com', status: 'queued', stage: 'Unscreened', priority: 19, lastActivity: null, note: '' },
+                    { account: 'AY Media', domain: 'aymag.com', status: 'queued', stage: 'Unscreened', priority: 20, lastActivity: null, note: '' },
+                    { account: 'CCRES', domain: 'ccres.org', status: 'queued', stage: 'Unscreened', priority: 21, lastActivity: null, note: '' },
+                    { account: 'Acumen Fina', domain: 'acumenfa.com', status: 'queued', stage: 'Unscreened', priority: 22, lastActivity: null, note: '' },
+                    { account: 'Custodia Bank', domain: 'custodiabank.com', status: 'queued', stage: 'Unscreened', priority: 23, lastActivity: null, note: '' },
+                    { account: '128 Plumbing', domain: 'call128.com', status: 'queued', stage: 'Unscreened', priority: 24, lastActivity: null, note: '' },
+                    { account: 'Dirty Hands', domain: 'dhstoresupport.com', status: 'queued', stage: 'Unscreened', priority: 25, lastActivity: null, note: '' },
+                    { account: 'Munipqlk', domain: '', status: 'queued', stage: 'Unscreened', priority: 26, lastActivity: null, note: '' },
+                    { account: 'Feed My Star', domain: 'fmsc.org', status: 'queued', stage: 'Unscreened', priority: 27, lastActivity: null, note: '' },
+                    { account: 'Utility Cloud', domain: 'amcsgroup.com', status: 'queued', stage: 'Unscreened', priority: 28, lastActivity: null, note: '' },
+                    { account: 'Avanti Bank', domain: '', status: 'queued', stage: 'Unscreened', priority: 29, lastActivity: null, note: '' },
+                    { account: 'Arc Southeast', domain: 'arc-southeast.org', status: 'queued', stage: 'Unscreened', priority: 30, lastActivity: null, note: '' },
+                    { account: '1800Accountant', domain: '1800accountant.com', status: 'queued', stage: 'Unscreened', priority: 31, lastActivity: null, note: 'Partner assisted' },
+                    { account: 'Hiperbaric', domain: '', status: 'queued', stage: 'Unscreened', priority: 32, lastActivity: null, note: 'Partner assisted' },
+                    { account: 'Hexagon', domain: '', status: 'queued', stage: 'Unscreened', priority: 33, lastActivity: null, note: 'Partner assisted' }
+                ]
             },
             {
-                opportunityName: 'TechStart Enterprise',
-                partner: 'Pyxis',
-                account: 'techstart.io',
-                dealSize: 200000,
-                closeDate: '2026-01-20',
-                salesCycleDays: 60,
-                ae: 'Varun Jiandani',
-                inBob: true
+                name: 'Pyxis',
+                owner: 'Brandon',
+                active: {
+                    account: 'TechStart',
+                    stage: 'Discovery',
+                    dealSize: 10000,
+                    weightedValue: 2500,
+                    lastActivity: '2025-12-20',
+                    nextAction: 'Book technical deep-dive',
+                    status: 'Needs activity'
+                },
+                backlog: [
+                    { account: 'MidMarket Labs', stage: 'Qualified', priority: 1 },
+                    { account: 'Northwind AI', stage: 'Qualified', priority: 2 }
+                ],
+                weeklyNote: 'Awaiting tech review resources; re-engage Jan 7.',
+                submittedDomains: [
+                    { account: 'TechStart', domain: 'techstart.io', status: 'active', stage: 'Discovery', priority: 1, lastActivity: '2025-12-20', note: 'Deep-dive to book' },
+                    { account: 'MidMarket Labs', domain: 'midmarketlabs.com', status: 'next', stage: 'Qualified', priority: 2, lastActivity: '2025-12-15', note: 'Awaiting kickoff' },
+                    { account: 'Northwind AI', domain: 'northwind.ai', status: 'next', stage: 'Qualified', priority: 3, lastActivity: '2025-12-14', note: 'Shortlist' },
+                    { account: 'Acme Retail', domain: 'acmeretail.com', status: 'queued', stage: 'Unscreened', priority: 4, lastActivity: null, note: '' },
+                    { account: 'SolidCAM', domain: 'solidcam.com', status: 'queued', stage: 'Unscreened', priority: 5, lastActivity: null, note: '' },
+                    { account: 'US Anti-Doping Agency (USADA)', domain: 'usada.org', status: 'queued', stage: 'Unscreened', priority: 6, lastActivity: null, note: '' },
+                    { account: 'Valiantys', domain: 'valiantys.com', status: 'queued', stage: 'Unscreened', priority: 7, lastActivity: null, note: '' },
+                    { account: 'CyberFortress', domain: 'cyberfortress.com', status: 'queued', stage: 'Unscreened', priority: 8, lastActivity: null, note: '' },
+                    { account: 'Trimark USA', domain: 'trimarkusa.com', status: 'queued', stage: 'Unscreened', priority: 9, lastActivity: null, note: '' },
+                    { account: 'Deriva Energy', domain: 'derivaenergy.com', status: 'queued', stage: 'Unscreened', priority: 10, lastActivity: null, note: '' },
+                    { account: 'Regal Plastics', domain: 'regal-plastics.com', status: 'queued', stage: 'Unscreened', priority: 11, lastActivity: null, note: '' },
+                    { account: 'VMG Health', domain: 'vmghealth.com', status: 'queued', stage: 'Unscreened', priority: 12, lastActivity: null, note: '' },
+                    { account: 'Mohr Partners', domain: 'mohrpartners.com', status: 'queued', stage: 'Unscreened', priority: 13, lastActivity: null, note: '' },
+                    { account: 'Aldevron', domain: 'aldevron.com', status: 'queued', stage: 'Unscreened', priority: 14, lastActivity: null, note: '' },
+                    { account: 'DAS Health', domain: 'dashealth.com', status: 'queued', stage: 'Unscreened', priority: 15, lastActivity: null, note: '' },
+                    { account: 'Security 101', domain: 'security101.com', status: 'queued', stage: 'Unscreened', priority: 16, lastActivity: null, note: '' },
+                    { account: 'EnergyHub', domain: 'energyhub.com', status: 'queued', stage: 'Unscreened', priority: 17, lastActivity: null, note: '' },
+                    { account: 'Palo Alto University', domain: 'paloaltou.edu', status: 'queued', stage: 'Unscreened', priority: 18, lastActivity: null, note: '' },
+                    { account: 'TDIndustries', domain: 'tdindustries.com', status: 'queued', stage: 'Unscreened', priority: 19, lastActivity: null, note: '' },
+                    { account: 'Overhaul', domain: 'over-haul.com', status: 'queued', stage: 'Unscreened', priority: 20, lastActivity: null, note: '' }
+                ]
             },
             {
-                opportunityName: 'Global Solutions',
-                partner: 'XrayTech',
-                account: 'globalsolutions.com',
-                dealSize: 100000,
-                closeDate: '2026-01-25',
-                salesCycleDays: 30,
-                ae: null,
-                inBob: false
+                name: 'iZeno',
+                owner: 'Michael Shen',
+                active: null,
+                backlog: [
+                    { account: 'APAC Retailer', stage: 'Qualified', priority: 1 },
+                    { account: 'DataOps Co', stage: 'Discovery', priority: 2 }
+                ],
+                weeklyNote: 'No active upmarket opp yet; reviewing list with Michael.',
+                submittedDomains: [
+                    { account: 'APAC Retailer', domain: 'apacretailer.com', status: 'next', stage: 'Qualified', priority: 1, lastActivity: null, note: 'Pending activation' },
+                    { account: 'DataOps Co', domain: 'dataops.co', status: 'next', stage: 'Discovery', priority: 2, lastActivity: null, note: '' }
+                ]
+            },
+            {
+                name: 'Orium',
+                owner: 'Michael Shen',
+                active: null,
+                backlog: [
+                    { account: 'Commerce Cloud', stage: 'Qualified', priority: 1 }
+                ],
+                weeklyNote: 'Queue ready once iZeno activates.',
+                submittedDomains: [
+                    { account: 'Commerce Cloud', domain: 'commercecloud.com', status: 'next', stage: 'Qualified', priority: 1, lastActivity: null, note: 'Pending activation' }
+                ]
             }
         ],
-        activeOpportunities: [
-            {
-                opportunityName: 'Enterprise Corp Deal',
-                partner: 'XrayTech',
-                source: 'Referral',
-                account: 'enterprisecorp.com',
-                stage: 'Proposal',
-                dealSize: 250000,
-                weightedValue: 125000,
-                ae: 'Emily Misurec',
-                inBob: true,
-                activity30d: '3 calls, 5 emails, 2 meetings',
-                risk: null,
-                coSellStatus: 'READY FOR CO-SELL (IN AE BOOK - LOOP IN AE EARLY)'
-            },
-            {
-                opportunityName: 'MidMarket Solutions',
-                partner: 'Pyxis',
-                source: 'Managed Revenue',
-                account: 'midmarket.com',
-                stage: 'Discovery',
-                dealSize: 80000,
-                weightedValue: 20000,
-                ae: null,
-                inBob: false,
-                activity30d: '1 call, 2 emails, 0 meetings',
-                risk: 'Low Activity',
-                coSellStatus: 'READY FOR CO-SELL (NET-NEW - PARTNER LEADS)'
-            },
-            {
-                opportunityName: 'Stalled Opportunity',
-                partner: 'iZeno',
-                source: 'Referral',
-                account: 'stalled.com',
-                stage: 'Qualified',
-                dealSize: 120000,
-                weightedValue: 12000,
-                ae: 'John Connell',
-                inBob: true,
-                activity30d: '0 calls, 0 emails, 0 meetings',
-                risk: 'Stalled',
-                coSellStatus: 'READY FOR CO-SELL (IN AE BOOK - LOOP IN AE EARLY)'
-            }
+        recentWins: [
+            { partner: 'Pyxis', account: 'TechStart Pilot', dealSize: 5000, closeDate: '2025-12-15', salesCycleDays: 45 }
         ],
-        bobOverlaps: [
-            {
-                partnerDomain: 'enterprisecorp.com',
-                partner: 'XrayTech',
-                source: 'Referral',
-                accountArr: 75000,
-                matchStatus: 'MATCH FOUND',
-                aeName: 'Emily Misurec',
-                bobField: 'company_owner',
-                coSellRouting: 'LOOP IN AE EARLY - Co-sell playbook Step 2'
-            },
-            {
-                partnerDomain: 'midmarket.com',
-                partner: 'Pyxis',
-                source: 'Managed Revenue',
-                accountArr: 25000,
-                matchStatus: 'NO MATCH',
-                aeName: null,
-                bobField: null,
-                coSellRouting: 'PARTNER LEADS - Net-new account, Zapier supports after discovery'
-            }
-        ],
-        partnerPerformance: {
-            'XrayTech': { pipeline: 400000, deals: 5, closedWon: 250000 },
-            'Pyxis': { pipeline: 280000, deals: 3, closedWon: 200000 },
-            'iZeno': { pipeline: 120000, deals: 1, closedWon: 0 },
-            'Orium': { pipeline: 0, deals: 0, closedWon: 0 }
-        }
+        lastUpdated: new Date().toISOString()
     };
 }
 
-// Render all dashboard components
 function renderDashboard() {
-    renderTargetSection();
-    renderMostImportantMetrics();
-    renderPipelineProgression();
-    renderPacingMetrics();
-    renderSummaryMetrics();
-    renderPartnerChart();
-    renderClosedWonDeals();
-    renderActiveOpportunities();
-    renderBoBOverlaps();
-    populateFilters();
+    updateLastUpdated(dashboardData.lastUpdated);
+    renderTargetStrip();
+    renderFocus();
+    renderBacklog();
+    renderDomains();
+    renderWeeklyUpdates();
+    renderRecentWins();
 }
 
-// Render target section
-function renderTargetSection() {
-    const target = dashboardData.quarterlyTarget;
-    const weighted = dashboardData.summaryMetrics.weightedPipelineValue || 0;
-    const closedWon = dashboardData.summaryMetrics.closedWonRevenue || 0;
-    const total = weighted + closedWon;
-    const coverage = target > 0 ? (weighted / target).toFixed(2) : '0.00';
-    const progressPercent = target > 0 ? Math.min((total / target) * 100, 100) : 0;
-    const progressColor = progressPercent >= 100 ? '#10b981' : progressPercent >= 75 ? '#f59e0b' : '#ef4444';
+function renderTargetStrip() {
+    const target = dashboardData.quarterlyTarget || 0;
+    const closed = dashboardData.summary?.closedWon || 0;
+    const weighted = dashboardData.summary?.weightedPipeline || 0;
+    const coverage = target > 0 ? ( (closed + weighted) / target ).toFixed(2) : '0.00';
+    const activeCount = dashboardData.summary?.activeCount || 0;
 
-    document.getElementById('quarterlyTarget').textContent = formatCurrency(target);
-    document.getElementById('weightedPipeline').textContent = formatCurrency(weighted);
-    document.getElementById('pipelineCoverage').textContent = coverage + 'x';
-    document.getElementById('targetProgress').style.width = progressPercent + '%';
-    document.getElementById('targetProgress').style.backgroundColor = progressColor;
-    
-    // Add helpful message if no data
-    const progressText = document.getElementById('targetProgress');
-    if (weighted === 0 && closedWon === 0) {
-        progressText.textContent = 'No pipeline data yet';
-        progressText.style.color = '#64748b';
-    } else {
-        progressText.textContent = coverage + 'x coverage';
-        progressText.style.color = '#fff';
-    }
+    setText('quarterlyTarget', formatCurrency(target));
+    setText('closedWon', formatCurrency(closed));
+    setText('activeCount', activeCount);
+    setText('weightedPipeline', formatCurrency(weighted));
+    setText('coverageRatio', `${coverage}x`);
 }
 
-// Render most important metrics (rotating based on priorities)
-function renderMostImportantMetrics() {
-    const m = dashboardData.summaryMetrics || {};
-    const progression = m.qualifiedCount || 0;
-    const conversionRate = m.pipelineConversionRate || 0;
-    const pacing = m.pipelinePacingPercent || 0;
-    const activityPacing = m.activityPacingPercent || 0;
-    
-    // Qualified Pipeline Progression
-    document.getElementById('qualifiedPipelineProgression').textContent = progression;
-    const progressionTrend = m.qualifiedPipelineTrend || '--';
-    document.getElementById('qualifiedPipelineTrend').textContent = progressionTrend;
-    
-    // Pipeline Conversion Rate
-    document.getElementById('pipelineConversionRate').textContent = conversionRate.toFixed(1) + '%';
-    const conversionTrend = m.conversionRateTrend || '--';
-    document.getElementById('conversionRateTrend').textContent = conversionTrend;
-    
-    // Pipeline Pacing
-    document.getElementById('pipelinePacing').textContent = pacing.toFixed(1) + '%';
-    const pacingTrend = m.pacingTrend || '--';
-    document.getElementById('pacingTrend').textContent = pacingTrend;
-    
-    // Activity Pacing
-    document.getElementById('activityPacing').textContent = activityPacing.toFixed(1) + '%';
-    const activityPacingTrend = m.activityPacingTrend || '--';
-    document.getElementById('activityPacingTrend').textContent = activityPacingTrend;
-}
+function renderFocus() {
+    const container = document.getElementById('focusContainer');
+    container.innerHTML = '';
 
-// Render pipeline progression metrics
-function renderPipelineProgression() {
-    const m = dashboardData.summaryMetrics || {};
-    
-    // Stage counts
-    document.getElementById('qualifiedCount').textContent = m.qualifiedCount || 0;
-    document.getElementById('discoveryCount').textContent = m.discoveryCount || 0;
-    document.getElementById('proposalCount').textContent = m.proposalCount || 0;
-    document.getElementById('negotiationCount').textContent = m.negotiationCount || 0;
-    
-    // Stage values
-    document.getElementById('qualifiedValue').textContent = formatCurrency(m.qualifiedValue || 0, true);
-    document.getElementById('discoveryValue').textContent = formatCurrency(m.discoveryValue || 0, true);
-    document.getElementById('proposalValue').textContent = formatCurrency(m.proposalValue || 0, true);
-    document.getElementById('negotiationValue').textContent = formatCurrency(m.negotiationValue || 0, true);
-    
-    // Conversion rates
-    document.getElementById('qualifiedToWonRate').textContent = (m.qualifiedToWonRate || 0).toFixed(1) + '%';
-    document.getElementById('discoveryToWonRate').textContent = (m.discoveryToWonRate || 0).toFixed(1) + '%';
-}
+    dashboardData.partners.forEach(partner => {
+        const card = document.createElement('div');
+        card.className = 'metric-card focus-card';
 
-// Render pacing metrics
-function renderPacingMetrics() {
-    const m = dashboardData.summaryMetrics || {};
-    const target = dashboardData.quarterlyTarget || 2000000;
-    
-    // Pipeline pacing
-    const pipelinePacing = m.pipelinePacingPercent || 0;
-    document.getElementById('pipelinePacingPercent').textContent = pipelinePacing.toFixed(1) + '%';
-    
-    // Revenue pacing
-    const revenuePacing = ((m.closedWonRevenue || 0) / target * 100);
-    document.getElementById('revenuePacingPercent').textContent = revenuePacing.toFixed(1) + '%';
-    
-    // Activity pacing
-    const activityPacing = m.activityPacingPercent || 0;
-    document.getElementById('activityPacingPercent').textContent = activityPacing.toFixed(1) + '%';
-    
-    // Deal velocity (deals per week)
-    const dealVelocity = m.dealVelocity || 0;
-    document.getElementById('dealVelocity').textContent = dealVelocity.toFixed(1);
-}
-
-// Render summary metrics
-function renderSummaryMetrics() {
-    const m = dashboardData.summaryMetrics || {};
-    document.getElementById('totalOpportunities').textContent = m.totalOpportunities || 0;
-    document.getElementById('closedWonDeals').textContent = m.closedWonDeals || 0;
-    document.getElementById('closedWonRevenue').textContent = formatCurrency(m.closedWonRevenue || 0);
-    document.getElementById('totalPipelineValue').textContent = formatCurrency(m.totalPipelineValue || 0);
-    document.getElementById('weightedPipelineValue').textContent = formatCurrency(m.weightedPipelineValue || 0);
-    document.getElementById('avgDealSize').textContent = formatCurrency(m.avgDealSize || 0);
-    document.getElementById('stalledDeals').textContent = m.stalledDeals || 0;
-    document.getElementById('longSalesCycle').textContent = m.longSalesCycle || 0;
-}
-
-// Render partner performance chart
-function renderPartnerChart() {
-    const ctx = document.getElementById('partnerChart').getContext('2d');
-    const partners = Object.keys(dashboardData.partnerPerformance);
-    const pipelineData = partners.map(p => dashboardData.partnerPerformance[p].pipeline);
-    const closedWonData = partners.map(p => dashboardData.partnerPerformance[p].closedWon);
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: partners,
-            datasets: [
-                {
-                    label: 'Pipeline Value',
-                    data: pipelineData,
-                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Closed Won',
-                    data: closedWonData,
-                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
-                    borderColor: 'rgba(16, 185, 129, 1)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + (value / 1000) + 'K';
-                        }
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
-                        }
-                    }
-                }
-            }
+        if (partner.active) {
+            const a = partner.active;
+            card.innerHTML = `
+                <div class="metric-label">${partner.name} — owner: ${partner.owner}</div>
+                <div class="metric-value">${a.account}</div>
+                <div class="metric-subtext">${a.stage} • ${formatCurrency(a.dealSize)} (${formatCurrency(a.weightedValue)} weighted)</div>
+                <div class="metric-subtext">Last activity: ${formatDate(a.lastActivity)} | Next: ${a.nextAction}</div>
+                <div class="metric-subtext">${a.status}</div>
+            `;
+        } else {
+            card.innerHTML = `
+                <div class="metric-label">${partner.name} — owner: ${partner.owner}</div>
+                <div class="metric-subtext">No active upmarket opp. Activate top backlog pick.</div>
+            `;
         }
+
+        container.appendChild(card);
     });
 }
 
-// Render closed won deals table
-function renderClosedWonDeals() {
-    const tbody = document.getElementById('closedWonTableBody');
+function renderBacklog() {
+    const tbody = document.getElementById('backlogBody');
     tbody.innerHTML = '';
 
-    if (dashboardData.closedWonDeals.length === 0) {
-        const totalOpps = dashboardData.summaryMetrics.totalOpportunities || 0;
-        const message = totalOpps === 0 
-            ? '<tr><td colspan="8" class="empty-state"><div class="empty-message"><strong>No closed won deals found</strong><br><span class="empty-subtext">This could mean:<ul><li>No partner-sourced deals have closed yet in 2026</li><li>Deals may be in earlier stages of the pipeline</li><li>Check that SQL queries are filtering for the correct date range</li></ul></span></div></td></tr>'
-            : '<tr><td colspan="8" class="empty-state"><div class="empty-message"><strong>No closed won deals yet</strong><br><span class="empty-subtext">You have ' + totalOpps + ' active opportunities in the pipeline. Focus on moving deals through the stages.</span></div></td></tr>';
-        tbody.innerHTML = message;
+    const rows = [];
+    dashboardData.partners.forEach(p => {
+        (p.backlog || []).forEach(item => {
+            rows.push({ partner: p.name, ...item });
+        });
+    });
+
+    if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="loading">No backlog queued</td></tr>';
         return;
     }
 
-    dashboardData.closedWonDeals.forEach(deal => {
+    rows
+        .sort((a, b) => a.priority - b.priority)
+        .forEach(item => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${item.partner}</td>
+                <td>${item.account}</td>
+                <td>${item.stage}</td>
+                <td>${item.priority}</td>
+            `;
+        });
+}
+
+function renderDomains() {
+    const tbody = document.getElementById('domainsBody');
+    tbody.innerHTML = '';
+
+    const summaryDiv = document.getElementById('domainSummary');
+    summaryDiv.innerHTML = '';
+
+    const rows = [];
+    dashboardData.partners.forEach(p => {
+        (p.submittedDomains || []).forEach(item => {
+            rows.push({ partner: p.name, owner: p.owner, ...item });
+        });
+    });
+
+    if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="loading">No submitted domains yet</td></tr>';
+        return;
+    }
+
+    const statusOrder = { active: 1, next: 2, queued: 3 };
+
+    rows
+        .sort((a, b) => {
+            const sa = statusOrder[a.status] || 99;
+            const sb = statusOrder[b.status] || 99;
+            if (sa !== sb) return sa - sb;
+            return (a.priority || 999) - (b.priority || 999);
+        })
+        .forEach(item => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${item.partner}</td>
+                <td>${item.account}${item.domain ? ' (' + item.domain + ')' : ''}</td>
+                <td class="status-${item.status || 'queued'}">${item.status || '-'}</td>
+                <td>${item.stage || '-'}</td>
+                <td>${item.priority || '-'}</td>
+                <td>${item.lastActivity ? formatDate(item.lastActivity) : '-'}</td>
+                <td>${item.note || ''}</td>
+            `;
+        });
+
+    // Partner-level totals
+    const byPartner = {};
+    rows.forEach(r => {
+        if (!byPartner[r.partner]) byPartner[r.partner] = { total: 0, active: 0, next: 0, queued: 0 };
+        byPartner[r.partner].total += 1;
+        if (r.status === 'active') byPartner[r.partner].active += 1;
+        else if (r.status === 'next') byPartner[r.partner].next += 1;
+        else byPartner[r.partner].queued += 1;
+    });
+
+    const summaryParts = Object.keys(byPartner).map(p => {
+        const s = byPartner[p];
+        return `<div class="summary-pill"><strong>${p}</strong>: ${s.total} submitted • ${s.active} active • ${s.next} next • ${s.queued} queued</div>`;
+    });
+    summaryDiv.innerHTML = summaryParts.join('');
+}
+
+function renderWeeklyUpdates() {
+    const container = document.getElementById('weeklyUpdates');
+    container.innerHTML = '';
+
+    dashboardData.partners.forEach(p => {
+        const note = document.createElement('div');
+        note.className = 'metric-card update-card';
+        note.innerHTML = `
+            <div class="metric-label">${p.name} — ${p.owner}</div>
+            <div class="metric-subtext">${p.weeklyNote || 'No update yet.'}</div>
+        `;
+        container.appendChild(note);
+    });
+}
+
+function renderRecentWins() {
+    const tbody = document.getElementById('recentWinsBody');
+    tbody.innerHTML = '';
+
+    if (!dashboardData.recentWins || dashboardData.recentWins.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="loading">No wins yet</td></tr>';
+        return;
+    }
+
+    dashboardData.recentWins.forEach(win => {
         const row = tbody.insertRow();
         row.innerHTML = `
-            <td>${deal.opportunityName}</td>
-            <td>${deal.partner}</td>
-            <td>${deal.account}</td>
-            <td>${formatCurrency(deal.dealSize)}</td>
-            <td>${formatDate(deal.closeDate)}</td>
-            <td>${deal.salesCycleDays} days</td>
-            <td>${deal.ae || '-'}</td>
-            <td>${deal.inBob ? '✓' : '-'}</td>
+            <td>${win.partner}</td>
+            <td>${win.account}</td>
+            <td>${formatCurrency(win.dealSize)}</td>
+            <td>${formatDate(win.closeDate)}</td>
+            <td>${win.salesCycleDays || '-'} days</td>
         `;
     });
 }
 
-// Render active opportunities table
-function renderActiveOpportunities() {
-    const tbody = document.getElementById('opportunitiesTableBody');
-    tbody.innerHTML = '';
-
-    if (dashboardData.activeOpportunities.length === 0) {
-        const lastUpdated = dashboardData.lastUpdated ? new Date(dashboardData.lastUpdated).toLocaleString() : 'Unknown';
-        const message = '<tr><td colspan="12" class="empty-state"><div class="empty-message"><strong>No active opportunities found</strong><br><span class="empty-subtext">Last updated: ' + lastUpdated + '<br><br>Possible reasons:<ul><li>No partner-sourced opportunities meet upmarket criteria (ARR >= $12,000)</li><li>All opportunities may have been closed or lost</li><li>Date filters may exclude current opportunities</li><li>Check SQL query filters and date ranges</li></ul><br><strong>Next steps:</strong><ul><li>Verify Databricks queries are returning data</li><li>Check that partner referral data exists</li><li>Review upmarket qualification criteria</li></ul></span></div></td></tr>';
-        tbody.innerHTML = message;
-        return;
-    }
-
-    dashboardData.activeOpportunities.forEach(opp => {
-        const row = tbody.insertRow();
-        const sourceBadge = opp.source === 'Referral' ? 'badge-referral' : 'badge-managed';
-        const riskBadge = opp.risk ? 'badge-risk' : '';
-        const coSellBadge = opp.coSellStatus.includes('READY') ? 'badge-ready' : '';
-        
-        row.innerHTML = `
-            <td>${opp.opportunityName}</td>
-            <td>${opp.partner}</td>
-            <td><span class="badge ${sourceBadge}">${opp.source}</span></td>
-            <td>${opp.account}</td>
-            <td>${opp.stage}</td>
-            <td>${formatCurrency(opp.dealSize)}</td>
-            <td>${formatCurrency(opp.weightedValue)}</td>
-            <td>${opp.ae || '-'}</td>
-            <td>${opp.inBob ? '✓' : '-'}</td>
-            <td>${opp.activity30d}</td>
-            <td>${opp.risk ? `<span class="badge ${riskBadge}">${opp.risk}</span>` : '-'}</td>
-            <td><span class="badge ${coSellBadge}">${opp.coSellStatus}</span></td>
-        `;
-    });
+// Helpers
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
 }
 
-// Render BoB overlaps table
-function renderBoBOverlaps() {
-    const tbody = document.getElementById('bobTableBody');
-    tbody.innerHTML = '';
-
-    if (dashboardData.bobOverlaps.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="loading">No BoB overlaps found</td></tr>';
-        return;
-    }
-
-    dashboardData.bobOverlaps.forEach(overlap => {
-        const row = tbody.insertRow();
-        const matchBadge = overlap.matchStatus === 'MATCH FOUND' ? 'badge-match' : 'badge-no-match';
-        
-        row.innerHTML = `
-            <td>${overlap.partnerDomain}</td>
-            <td>${overlap.partner}</td>
-            <td><span class="badge badge-referral">${overlap.source}</span></td>
-            <td>${formatCurrency(overlap.accountArr)}</td>
-            <td><span class="badge ${matchBadge}">${overlap.matchStatus}</span></td>
-            <td>${overlap.aeName || '-'}</td>
-            <td>${overlap.bobField || '-'}</td>
-            <td>${overlap.coSellRouting}</td>
-        `;
-    });
-}
-
-// Populate filter dropdowns
-function populateFilters() {
-    const partnerFilter = document.getElementById('filterPartner');
-    const partners = [...new Set(dashboardData.activeOpportunities.map(o => o.partner))];
-    
-    partners.forEach(partner => {
-        const option = document.createElement('option');
-        option.value = partner;
-        option.textContent = partner;
-        partnerFilter.appendChild(option);
-    });
-}
-
-// Filter opportunities
-function filterOpportunities() {
-    const partnerFilter = document.getElementById('filterPartner').value;
-    const stageFilter = document.getElementById('filterStage').value;
-    const riskFilter = document.getElementById('filterRisk').value;
-    const searchTerm = document.getElementById('searchOpportunities').value.toLowerCase();
-
-    const tbody = document.getElementById('opportunitiesTableBody');
-    tbody.innerHTML = '';
-
-    const filtered = dashboardData.activeOpportunities.filter(opp => {
-        const matchPartner = !partnerFilter || opp.partner === partnerFilter;
-        const matchStage = !stageFilter || opp.stage === stageFilter;
-        const matchRisk = !riskFilter || (opp.risk && opp.risk.includes(riskFilter));
-        const matchSearch = !searchTerm || 
-            opp.opportunityName.toLowerCase().includes(searchTerm) ||
-            opp.account.toLowerCase().includes(searchTerm) ||
-            (opp.partner && opp.partner.toLowerCase().includes(searchTerm));
-
-        return matchPartner && matchStage && matchRisk && matchSearch;
-    });
-
-    if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="12" class="loading">No opportunities match the filters</td></tr>';
-        return;
-    }
-
-    filtered.forEach(opp => {
-        const row = tbody.insertRow();
-        const sourceBadge = opp.source === 'Referral' ? 'badge-referral' : 'badge-managed';
-        const riskBadge = opp.risk ? 'badge-risk' : '';
-        const coSellBadge = opp.coSellStatus.includes('READY') ? 'badge-ready' : '';
-        
-        row.innerHTML = `
-            <td>${opp.opportunityName}</td>
-            <td>${opp.partner}</td>
-            <td><span class="badge ${sourceBadge}">${opp.source}</span></td>
-            <td>${opp.account}</td>
-            <td>${opp.stage}</td>
-            <td>${formatCurrency(opp.dealSize)}</td>
-            <td>${formatCurrency(opp.weightedValue)}</td>
-            <td>${opp.ae || '-'}</td>
-            <td>${opp.inBob ? '✓' : '-'}</td>
-            <td>${opp.activity30d}</td>
-            <td>${opp.risk ? `<span class="badge ${riskBadge}">${opp.risk}</span>` : '-'}</td>
-            <td><span class="badge ${coSellBadge}">${opp.coSellStatus}</span></td>
-        `;
-    });
-}
-
-// Utility functions
-function formatCurrency(value, abbreviated = false) {
-    if (abbreviated && value >= 1000000) {
-        return (value / 1000000).toFixed(1) + 'M';
-    } else if (abbreviated && value >= 1000) {
-        return (value / 1000).toFixed(0) + 'K';
-    }
+function formatCurrency(value) {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
-    }).format(value);
+    }).format(value || 0);
 }
 
 function formatDate(dateString) {
     if (!dateString) return '-';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
-

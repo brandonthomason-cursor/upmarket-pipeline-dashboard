@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Upmarket Pipeline and Revenue Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="config.js"></script>
+    <!-- Allow embedding in iframes (for Coda) -->
+    <meta http-equiv="X-Frame-Options" content="ALLOWALL">
+    <style>
+        /* Iframe-specific styles */
+        body.iframe-mode {
+            padding: 10px;
+        }
+        .dashboard-container.iframe-mode {
+            max-width: 100%;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        // Detect if we're in an iframe (Coda)
+        if (window.self !== window.top) {
+            document.documentElement.classList.add('iframe-mode');
+            document.body.classList.add('iframe-mode');
+            document.querySelector('.dashboard-container').classList.add('iframe-mode');
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1>Upmarket Pipeline Focus (Q1)</h1>
+            <div class="header-info">
+                <span class="last-updated">Last Updated: <span id="lastUpdated"></span></span>
+                <button class="btn-refresh" onclick="loadDashboardData()">🔄 Refresh</button>
+            </div>
+        </header>
+
+        <!-- Q1 Target Strip -->
+        <section class="metrics-section">
+            <h2>Q1 Upmarket Target</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Target</div>
+                    <div class="metric-value" id="quarterlyTarget">$20,000</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Closed Won</div>
+                    <div class="metric-value success" id="closedWon">$0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Active (of 3)</div>
+                    <div class="metric-value" id="activeCount">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Weighted Pipeline</div>
+                    <div class="metric-value" id="weightedPipeline">$0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Coverage</div>
+                    <div class="metric-value" id="coverageRatio">0.0x</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Focus: one-at-a-time deals -->
+        <section class="metrics-section">
+            <h2>Current Focus (One-at-a-Time)</h2>
+            <div class="focus-grid" id="focusContainer">
+                <!-- Partner focus cards injected here -->
+            </div>
+        </section>
+
+        <!-- Backlog queue -->
+        <section class="opportunities-section">
+            <h2>Backlog Queue (Next Up)</h2>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Partner</th>
+                            <th>Account</th>
+                            <th>Stage</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody id="backlogBody">
+                        <tr><td colspan="4" class="loading">Loading backlog...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Submitted Domains Funnel -->
+        <section class="opportunities-section">
+            <h2>Submitted Upmarket Domains (Funnel)</h2>
+            <div id="domainSummary" class="domain-summary"></div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Partner</th>
+                            <th>Account/Domain</th>
+                            <th>Status</th>
+                            <th>Stage</th>
+                            <th>Priority</th>
+                            <th>Last Activity</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody id="domainsBody">
+                        <tr><td colspan="7" class="loading">Loading submitted domains...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Weekly updates -->
+        <section class="metrics-section">
+            <h2>This Week’s Updates</h2>
+            <div class="updates-grid" id="weeklyUpdates">
+                <!-- Weekly notes injected here -->
+            </div>
+        </section>
+
+        <!-- Recent wins -->
+        <section class="deals-section">
+            <h2>Recent Wins (30/90d)</h2>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Partner</th>
+                            <th>Account</th>
+                            <th>Deal Size</th>
+                            <th>Close Date</th>
+                            <th>Sales Cycle</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentWinsBody">
+                        <tr><td colspan="5" class="loading">No wins yet</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
