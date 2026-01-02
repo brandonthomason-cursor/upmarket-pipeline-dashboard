@@ -1,8 +1,10 @@
 // Upmarket Pipeline Focus - minimal, one-at-a-time view
 let dashboardData = {};
+let selectedPartner = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSampleData();
+    populatePartnerFilter();
     renderDashboard();
     loadDashboardData();
 });
@@ -24,6 +26,7 @@ function loadDashboardData() {
         .then(r => r.ok ? r.json() : Promise.reject())
         .then(data => {
             dashboardData = data;
+                populatePartnerFilter();
             renderDashboard();
         })
         .catch(() => {
@@ -170,20 +173,21 @@ function loadSampleData() {
 
 function renderDashboard() {
     updateLastUpdated(dashboardData.lastUpdated);
-    renderTargetStrip();
-    renderFocus();
-    renderBacklog();
-    renderDomains();
-    renderWeeklyUpdates();
-    renderRecentWins();
+    const partners = getFilteredPartners();
+    renderTargetStrip(partners);
+    renderFocus(partners);
+    renderBacklog(partners);
+    renderDomains(partners);
+    renderWeeklyUpdates(partners);
+    renderRecentWins(partners);
 }
 
-function renderTargetStrip() {
+function renderTargetStrip(partners) {
     const target = dashboardData.quarterlyTarget || 0;
-    const closed = dashboardData.summary?.closedWon || 0;
-    const weighted = dashboardData.summary?.weightedPipeline || 0;
-    const coverage = target > 0 ? ( (closed + weighted) / target ).toFixed(2) : '0.00';
-    const activeCount = dashboardData.summary?.activeCount || 0;
+    const closed = computeClosedWon(partners);
+    const weighted = partners.reduce((sum, p) => sum + (p.active?.weightedValue || 0), 0);
+    const coverage = target > 0 ? ((closed + weighted) / target).toFixed(2) : '0.00';
+    const activeCount = partners.filter(p => p.active).length;
 
     setText('quarterlyTarget', formatCurrency(target));
     setText('closedWon', formatCurrency(closed));
@@ -192,11 +196,11 @@ function renderTargetStrip() {
     setText('coverageRatio', `${coverage}x`);
 }
 
-function renderFocus() {
+function renderFocus(partners) {
     const container = document.getElementById('focusContainer');
     container.innerHTML = '';
 
-    dashboardData.partners.forEach(partner => {
+    partners.forEach(partner => {
         const card = document.createElement('div');
         card.className = 'metric-card focus-card';
 
@@ -220,12 +224,12 @@ function renderFocus() {
     });
 }
 
-function renderBacklog() {
+function renderBacklog(partners) {
     const tbody = document.getElementById('backlogBody');
     tbody.innerHTML = '';
 
     const rows = [];
-    dashboardData.partners.forEach(p => {
+    partners.forEach(p => {
         (p.backlog || []).forEach(item => {
             rows.push({ partner: p.name, ...item });
         });
@@ -249,7 +253,7 @@ function renderBacklog() {
         });
 }
 
-function renderDomains() {
+function renderDomains(partners) {
     const tbody = document.getElementById('domainsBody');
     tbody.innerHTML = '';
 
@@ -257,7 +261,7 @@ function renderDomains() {
     summaryDiv.innerHTML = '';
 
     const rows = [];
-    dashboardData.partners.forEach(p => {
+    partners.forEach(p => {
         (p.submittedDomains || []).forEach(item => {
             rows.push({ partner: p.name, owner: p.owner, ...item });
         });
@@ -307,11 +311,11 @@ function renderDomains() {
     summaryDiv.innerHTML = summaryParts.join('');
 }
 
-function renderWeeklyUpdates() {
+function renderWeeklyUpdates(partners) {
     const container = document.getElementById('weeklyUpdates');
     container.innerHTML = '';
 
-    dashboardData.partners.forEach(p => {
+    partners.forEach(p => {
         const note = document.createElement('div');
         note.className = 'metric-card update-card';
         note.innerHTML = `
@@ -322,16 +326,21 @@ function renderWeeklyUpdates() {
     });
 }
 
-function renderRecentWins() {
+function renderRecentWins(partners) {
     const tbody = document.getElementById('recentWinsBody');
     tbody.innerHTML = '';
 
-    if (!dashboardData.recentWins || dashboardData.recentWins.length === 0) {
+    const partnerNames = new Set(partners.map(p => p.name));
+    const wins = (dashboardData.recentWins || []).filter(win => {
+        return selectedPartner ? partnerNames.has(win.partner) : true;
+    });
+
+    if (!wins || wins.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="loading">No wins yet</td></tr>';
         return;
     }
 
-    dashboardData.recentWins.forEach(win => {
+    wins.forEach(win => {
         const row = tbody.insertRow();
         row.innerHTML = `
             <td>${win.partner}</td>
@@ -362,4 +371,36 @@ function formatDate(dateString) {
     if (!dateString) return '-';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function getFilteredPartners() {
+    if (!dashboardData.partners) return [];
+    if (!selectedPartner) return dashboardData.partners;
+    return dashboardData.partners.filter(p => p.name === selectedPartner);
+}
+
+function populatePartnerFilter() {
+    const select = document.getElementById('partnerFilter');
+    if (!select || !dashboardData.partners) return;
+    const current = selectedPartner;
+    select.innerHTML = '<option value=\"\">All partners</option>';
+    dashboardData.partners.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.name;
+        opt.textContent = p.name;
+        if (p.name === current) opt.selected = true;
+        select.appendChild(opt);
+    });
+    select.onchange = (e) => {
+        selectedPartner = e.target.value;
+        renderDashboard();
+    };
+}
+
+function computeClosedWon(partners) {
+    const partnerNames = new Set(partners.map(p => p.name));
+    return (dashboardData.recentWins || []).reduce((sum, win) => {
+        if (selectedPartner && !partnerNames.has(win.partner)) return sum;
+        return sum + (win.dealSize || 0);
+    }, 0);
 }
