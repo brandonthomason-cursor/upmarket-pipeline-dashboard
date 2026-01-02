@@ -188,11 +188,21 @@ function renderTargetStrip(partners) {
     const weighted = partners.reduce((sum, p) => sum + (p.active?.weightedValue || 0), 0);
     const coverage = target > 0 ? ((closed + weighted) / target).toFixed(2) : '0.00';
     const activeCount = partners.filter(p => p.active).length;
+    const gap = Math.max(target - closed, 0);
+    const forecast = closed + weighted;
+    const forecastStatus = target > 0
+        ? forecast >= target
+            ? 'On track to hit target'
+            : `Short by ${formatCurrency(target - forecast)}`
+        : '';
 
     setText('quarterlyTarget', formatCurrency(target));
     setText('closedWon', formatCurrency(closed));
+    setText('gapToGoal', formatCurrency(gap));
     setText('activeCount', activeCount);
     setText('weightedPipeline', formatCurrency(weighted));
+    setText('forecastTotal', formatCurrency(forecast));
+    setText('forecastStatus', forecastStatus);
     setText('coverageRatio', `${coverage}x`);
 }
 

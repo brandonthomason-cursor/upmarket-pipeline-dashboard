@@ -59,12 +59,21 @@
                     <div class="metric-value success" id="closedWon">$0</div>
                 </div>
                 <div class="metric-card">
+                    <div class="metric-label">Gap to Goal <span class="info-icon" data-tip="Target minus closed won.">i</span></div>
+                    <div class="metric-value" id="gapToGoal">$0</div>
+                </div>
+                <div class="metric-card">
                     <div class="metric-label">Active (of 3) <span class="info-icon" data-tip="Number of currently active upmarket opportunities (one-at-a-time, max 3 candidates).">i</span></div>
                     <div class="metric-value" id="activeCount">0</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">Weighted Pipeline <span class="info-icon" data-tip="Sum of active deal values × stage probability (filtered to selected partner if applied).">i</span></div>
                     <div class="metric-value" id="weightedPipeline">$0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Forecast (Closed + Weighted) <span class="info-icon" data-tip="Closed won plus weighted pipeline; simple forecast indicator.">i</span></div>
+                    <div class="metric-value" id="forecastTotal">$0</div>
+                    <div class="metric-subtext" id="forecastStatus"></div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">Coverage <span class="info-icon" data-tip="(Closed Won + Weighted Pipeline) ÷ Target.">i</span></div>
