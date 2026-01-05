@@ -251,14 +251,26 @@ function renderBacklog(partners) {
     }
 
     rows
-        .sort((a, b) => a.priority - b.priority)
-        .forEach(item => {
+        .sort((a, b) => {
+            const pa = a.partner.toLowerCase();
+            const pb = b.partner.toLowerCase();
+            if (pa !== pb) return pa < pb ? -1 : 1;
+            return (a.priority || 999) - (b.priority || 999);
+        })
+        .forEach((item, idx, arr) => {
+            const prev = idx > 0 ? arr[idx - 1] : null;
+            const isNewPartner = !prev || prev.partner !== item.partner;
+            if (isNewPartner) {
+                const headerRow = tbody.insertRow();
+                headerRow.className = 'group-row';
+                headerRow.innerHTML = `<td colspan="4">${item.partner}</td>`;
+            }
             const row = tbody.insertRow();
             row.innerHTML = `
                 <td>${item.partner}</td>
                 <td>${item.account}</td>
                 <td>${item.stage}</td>
-                <td>${item.priority}</td>
+                <td>${item.priority || '-'}</td>
             `;
         });
 }

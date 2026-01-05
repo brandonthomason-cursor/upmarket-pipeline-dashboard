@@ -479,6 +479,12 @@ body {
     opacity: 1;
 }
 
+.group-row td {
+    background: #f8fafc;
+    font-weight: 700;
+    color: #475569;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .dashboard-header {
