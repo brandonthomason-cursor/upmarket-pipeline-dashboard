@@ -37,8 +37,8 @@ function loadSampleData() {
         quarterlyTarget: 20000,
         summary: {
             closedWon: 5000,
-            activeCount: 2,
-            weightedPipeline: 12000
+            activeCount: 3,
+            weightedPipeline: 18750
         },
         partners: [
             {
@@ -57,7 +57,19 @@ function loadSampleData() {
                     { account: 'Global Solutions', stage: 'Qualified', priority: 1 },
                     { account: 'FinServe Co', stage: 'Discovery', priority: 2 }
                 ],
-                weeklyNote: '🎉 BIG WIN: Tom got verbal thumbs up from Green Check Verified co-founder/CSO for MCP sales meeting! Current Pro 50k customer, AI/MCP huge priority for dev team enablement. Tom\'s zaps from 5 years ago still running. Found 8 accounts (1 paid)—consolidation opportunity. Brandon to get MCP enablement materials from Chris Ondera. Aris completing training by Jan 17 to maintain Platinum status. Need to prioritize top 3 from submitted list.',
+                weeklyNote: `<strong>📅 Jan 9, 2026 Meeting Summary</strong><br><br>
+<strong>🎯 Upmarket Opportunity Discussed:</strong><br>
+• <strong>Green Check Verified</strong> — Tom secured verbal thumbs up from co-founder/CSO for MCP sales meeting<br>
+• Current Pro 50k customer; AI/MCP is huge priority for their dev team enablement<br>
+• Tom's zaps from 5 years ago still running (proof of stickiness)<br>
+• Found 8 accounts associated (only 1 paid) — consolidation opportunity to discuss<br>
+• No AE currently assigned in HubSpot — clean opportunity<br><br>
+<strong>✅ Action Items:</strong><br>
+• <strong>Brandon</strong>: Get MCP enablement materials from Chris Ondera — <em>Due: Jan 13</em><br>
+• <strong>Brandon</strong>: Prep MCP pitch deck using Gamma — <em>Due: Jan 15</em><br>
+• <strong>Tom/Aris</strong>: Complete Zapier training to maintain Platinum status — <em>Due: Jan 17</em><br>
+• <strong>Tom</strong>: Prioritize top 3 accounts from submitted list — <em>Due: Jan 16</em><br>
+• <strong>Team</strong>: Schedule Green Check sales meeting — <em>Due: Jan 20</em>`,
                 submittedDomains: [
                     { account: 'Green Check Verified', domain: 'greencheckverified.com', status: 'active', stage: 'Discovery', priority: 1, lastActivity: '2026-01-09', note: 'Verbal YES - MCP sales meeting' },
                     { account: 'Global Solutions', domain: 'globalsolutions.com', status: 'next', stage: 'Qualified', priority: 2, lastActivity: '2025-12-18', note: 'Queued next' },
@@ -104,13 +116,29 @@ function loadSampleData() {
                     weightedValue: 0,
                     lastActivity: '2026-01-09',
                     nextAction: 'Parker to identify Austin-based accounts (1 week)',
-                    status: 'In progress'
+                    status: 'In progress - selecting target account'
                 },
                 backlog: [
                     { account: 'MidMarket Labs', stage: 'Qualified', priority: 1 },
                     { account: 'Northwind AI', stage: 'Qualified', priority: 2 }
                 ],
-                weeklyNote: '✅ Strategy sync with Parker Short & Claudia (MDF). Parker reviewing client list for Austin-based accounts—whittle to top 3 → pick ONE to prove co-sell motion. Parker to submit MDF form for Austin Workflow Lab event (Rev Ops focus). Brandon absorbing AI Train the Trainer material to pilot with Pyxis team. Targeting post-LA (Feb) for in-person Austin event. Valiantis Atlassian migration explored but deprioritized.',
+                weeklyNote: `<strong>📅 Jan 9, 2026 Meeting Summary</strong><br><br>
+<strong>🎯 Upmarket Opportunity Strategy:</strong><br>
+• Focus on proving co-sell motion with ONE account before scaling<br>
+• Target: Austin-based accounts to enable in-person Workflow Lab event<br>
+• Exploring Rev Ops-focused positioning for higher ROI<br>
+• Valiantis Atlassian migration discussed but deprioritized (not in Parker's wheelhouse)<br>
+• MDF budget available: $1,000-$2,500 range for Workflow Lab events<br><br>
+<strong>🤝 Co-Marketing Plans:</strong><br>
+• Austin Workflow Lab event targeting Rev Ops professionals<br>
+• AI Train the Trainer bootcamp pilot with Pyxis team<br>
+• Targeting post-LA (Feb) for in-person Austin event<br><br>
+<strong>✅ Action Items:</strong><br>
+• <strong>Parker Short</strong>: Review client list for Austin-based accounts, whittle to top 3 → pick ONE — <em>Due: Jan 16</em><br>
+• <strong>Parker Short</strong>: Submit MDF form for Austin Workflow Lab event — <em>Due: Jan 16</em><br>
+• <strong>Brandon</strong>: Absorb AI Train the Trainer material to pilot with Pyxis — <em>Due: Jan 17</em><br>
+• <strong>Claudia</strong>: Resume NoCodOps Austin thread in community — <em>Due: Ongoing</em><br>
+• <strong>Team</strong>: Plan Austin Workflow Lab event — <em>Due: Feb 2026 (post-LA trip)</em>`,
                 submittedDomains: [
                     { account: 'TechStart', domain: 'techstart.io', status: 'active', stage: 'Discovery', priority: 1, lastActivity: '2025-12-20', note: 'Deep-dive to book' },
                     { account: 'MidMarket Labs', domain: 'midmarketlabs.com', status: 'next', stage: 'Qualified', priority: 2, lastActivity: '2025-12-15', note: 'Awaiting kickoff' },
@@ -142,7 +170,14 @@ function loadSampleData() {
                     { account: 'APAC Retailer', stage: 'Qualified', priority: 1 },
                     { account: 'DataOps Co', stage: 'Discovery', priority: 2 }
                 ],
-                weeklyNote: 'No active upmarket opp yet; reviewing list with Michael.',
+                weeklyNote: `<strong>📅 Status: Pending Activation</strong><br><br>
+<strong>🎯 Upmarket Opportunity:</strong><br>
+• No active upmarket opportunity yet<br>
+• Reviewing potential accounts with Michael Shen<br>
+• Singapore time zone presents scheduling challenges<br><br>
+<strong>✅ Action Items:</strong><br>
+• <strong>Michael Shen</strong>: Review submitted account list and prioritize — <em>Due: Jan 17</em><br>
+• <strong>Brandon</strong>: Schedule sync with Michael to align on activation — <em>Due: Jan 20</em>`,
                 submittedDomains: [
                     { account: 'APAC Retailer', domain: 'apacretailer.com', status: 'next', stage: 'Qualified', priority: 1, lastActivity: null, note: 'Pending activation' },
                     { account: 'DataOps Co', domain: 'dataops.co', status: 'next', stage: 'Discovery', priority: 2, lastActivity: null, note: '' }
@@ -163,7 +198,23 @@ function loadSampleData() {
                 backlog: [
                     { account: 'Crossbeam Overlap TBD', stage: 'Qualified', priority: 1 }
                 ],
-                weeklyNote: '🤝 Partnership kickoff call with Orium (250-person professional services firm). Met with Everett Zufelt (14yr veteran), Bruce Lee (new AE, ex-Jitterbit/Mulesoft/Trey). Orium specializes in headless commerce, AI orchestration—clients include Apple, Steelcase, Stripe. Showcased Stripe automated payment audit solution (AI-powered). Offer "Agentix Strategy Canvas" 2-day workshops. Ryan to bring specific customer examples. Will review Crossbeam shared customers (new + existing) to identify co-sell opportunities. Focus: start small with 2-3 use cases, measurable outcomes.',
+                weeklyNote: `<strong>📅 Jan 9, 2026 Partnership Kickoff Meeting</strong><br><br>
+<strong>🎯 Upmarket Opportunity:</strong><br>
+• Partnership exploration with Orium (250-person professional services firm, founded 2009)<br>
+• Focus areas: AI orchestration, agent solutions, headless commerce<br>
+• Enterprise clients include: Apple, Steelcase, Fluent, Commerce, Stripe<br>
+• Markets: US, Canada, LATAM (100+ certifications)<br><br>
+<strong>💡 Key Discussion Points:</strong><br>
+• Showcased Stripe automated payment audit solution (AI-powered) — previously 1-day manual process now automated<br>
+• Offer "Agentix Strategy Canvas" — 2-day workshop for client AI readiness<br>
+• Bruce Lee (new AE, 10yr iPaaS experience: Jitterbit, Mulesoft, Trey) will be primary contact<br>
+• Everett Zufelt (14yr veteran, engineering background) provided strategic context<br>
+• Emphasis: Start small with 2-3 use cases, measurable outcomes, governance frameworks<br><br>
+<strong>✅ Action Items:</strong><br>
+• <strong>Ryan Kaschak</strong>: Bring specific customer examples to follow-up meeting — <em>Due: Next Meeting</em><br>
+• <strong>Ryan Kaschak</strong>: Share Zapier 2026 strategy in follow-up — <em>Due: Next Meeting</em><br>
+• <strong>Bruce Lee (Orium)</strong>: Review Crossbeam shared customers for co-sell opportunities — <em>Due: Jan 20</em><br>
+• <strong>Michael Shen</strong>: Schedule follow-up strategy meeting — <em>Due: Jan 17</em>`,
                 submittedDomains: [
                     { account: 'Partnership - Crossbeam Review', domain: '', status: 'active', stage: 'Discovery', priority: 1, lastActivity: '2026-01-09', note: 'Review shared customers' }
                 ]
