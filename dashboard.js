@@ -45,21 +45,21 @@ function loadSampleData() {
                 name: 'Xray Tech',
                 owner: 'Brandon',
                 active: {
-                    account: 'Enterprise Corp',
-                    stage: 'Proposal',
+                    account: 'Green Check Verified',
+                    stage: 'Discovery',
                     dealSize: 12000,
-                    weightedValue: 6000,
-                    lastActivity: '2025-12-22',
-                    nextAction: 'Pricing review on Jan 6',
-                    status: 'On track'
+                    weightedValue: 3000,
+                    lastActivity: '2026-01-09',
+                    nextAction: 'Prep MCP pitch deck, get enablement from Chris Ondera',
+                    status: 'In progress - verbal YES for sales meeting'
                 },
                 backlog: [
                     { account: 'Global Solutions', stage: 'Qualified', priority: 1 },
                     { account: 'FinServe Co', stage: 'Discovery', priority: 2 }
                 ],
-                weeklyNote: 'Met pre-holidays; CFO review pending; schedule exec sponsor call week of Jan 6.',
+                weeklyNote: '🎉 BIG WIN: Tom got verbal thumbs up from Green Check Verified co-founder/CSO for MCP sales meeting! Current Pro 50k customer, AI/MCP huge priority for dev team enablement. Tom\'s zaps from 5 years ago still running. Found 8 accounts (1 paid)—consolidation opportunity. Brandon to get MCP enablement materials from Chris Ondera. Aris completing training by Jan 17 to maintain Platinum status. Need to prioritize top 3 from submitted list.',
                 submittedDomains: [
-                    { account: 'Enterprise Corp', domain: 'enterprisecorp.com', status: 'active', stage: 'Proposal', priority: 1, lastActivity: '2025-12-22', note: 'Pricing review Jan 6' },
+                    { account: 'Green Check Verified', domain: 'greencheckverified.com', status: 'active', stage: 'Discovery', priority: 1, lastActivity: '2026-01-09', note: 'Verbal YES - MCP sales meeting' },
                     { account: 'Global Solutions', domain: 'globalsolutions.com', status: 'next', stage: 'Qualified', priority: 2, lastActivity: '2025-12-18', note: 'Queued next' },
                     { account: 'FinServe Co', domain: 'finserve.co', status: 'next', stage: 'Discovery', priority: 3, lastActivity: '2025-12-17', note: 'Discovery prep' },
                     { account: 'HealthSoft', domain: 'healthsoft.io', status: 'queued', stage: 'Unscreened', priority: 4, lastActivity: null, note: '' },
