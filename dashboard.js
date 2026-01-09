@@ -149,22 +149,30 @@ function loadSampleData() {
                 ]
             },
             {
-                name: 'Orium',
+                name: 'Orium (Myplanet)',
                 owner: 'Michael Shen',
-                active: null,
+                active: {
+                    account: 'Partnership Activation',
+                    stage: 'Discovery',
+                    dealSize: 15000,
+                    weightedValue: 3750,
+                    lastActivity: '2026-01-09',
+                    nextAction: 'Ryan to bring customer examples; Review Crossbeam shared customers',
+                    status: 'Follow-up meeting scheduled'
+                },
                 backlog: [
-                    { account: 'Commerce Cloud', stage: 'Qualified', priority: 1 }
+                    { account: 'Crossbeam Overlap TBD', stage: 'Qualified', priority: 1 }
                 ],
-                weeklyNote: 'Queue ready once iZeno activates.',
+                weeklyNote: '🤝 Partnership kickoff call with Orium (250-person professional services firm). Met with Everett Zufelt (14yr veteran), Bruce Lee (new AE, ex-Jitterbit/Mulesoft/Trey). Orium specializes in headless commerce, AI orchestration—clients include Apple, Steelcase, Stripe. Showcased Stripe automated payment audit solution (AI-powered). Offer "Agentix Strategy Canvas" 2-day workshops. Ryan to bring specific customer examples. Will review Crossbeam shared customers (new + existing) to identify co-sell opportunities. Focus: start small with 2-3 use cases, measurable outcomes.',
                 submittedDomains: [
-                    { account: 'Commerce Cloud', domain: 'commercecloud.com', status: 'next', stage: 'Qualified', priority: 1, lastActivity: null, note: 'Pending activation' }
+                    { account: 'Partnership - Crossbeam Review', domain: '', status: 'active', stage: 'Discovery', priority: 1, lastActivity: '2026-01-09', note: 'Review shared customers' }
                 ]
             }
         ],
         recentWins: [
             { partner: 'Pyxis', account: 'TechStart Pilot', dealSize: 5000, closeDate: '2025-12-15', salesCycleDays: 45 }
         ],
-        lastUpdated: '2026-01-09T12:00:00.000Z'
+        lastUpdated: '2026-01-09T14:00:00.000Z'
     };
 }
 
