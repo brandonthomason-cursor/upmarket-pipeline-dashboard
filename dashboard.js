@@ -36,10 +36,60 @@ function loadSampleData() {
     dashboardData = {
         quarterlyTarget: 20000,
         summary: {
-            closedWon: 5000,
-            activeCount: 3,
-            weightedPipeline: 18750
+            closedWon: 0,
+            activeCount: 4,
+            weightedPipeline: 10750
         },
+        // Partner Sourced Opportunities - deals driven by partners
+        partnerSourced: [
+            {
+                partner: 'Xray Tech',
+                owner: 'Brandon',
+                account: 'Green Check Verified',
+                stage: 'Discovery',
+                dealSize: 12000,
+                weightedValue: 3000,
+                lastActivity: '2026-01-09',
+                nextAction: 'Prep MCP pitch deck, get enablement from Chris Ondera',
+                status: 'Verbal YES for MCP sales meeting'
+            },
+            {
+                partner: 'Pyxis',
+                owner: 'Brandon',
+                account: 'TBD - Austin Account',
+                stage: 'Account Selection',
+                dealSize: 10000,
+                weightedValue: 0,
+                lastActivity: '2026-01-09',
+                nextAction: 'Parker to identify Austin-based accounts (1 week)',
+                status: 'Selecting target account'
+            },
+            {
+                partner: 'Orium (Myplanet)',
+                owner: 'Michael Shen',
+                account: 'Partnership Activation',
+                stage: 'Discovery',
+                dealSize: 15000,
+                weightedValue: 3750,
+                lastActivity: '2026-01-09',
+                nextAction: 'Ryan to bring customer examples; Review Crossbeam',
+                status: 'Follow-up meeting scheduled'
+            }
+        ],
+        // Partner Assisted Opportunities - deals where partners help with Zapier pipeline
+        partnerAssisted: [
+            {
+                partner: 'Connex Digital',
+                owner: 'Brandon',
+                account: 'Partner Services Fund Engagement',
+                stage: 'Scoping',
+                dealSize: 10000,
+                weightedValue: 4000,
+                lastActivity: '2026-01-09',
+                nextAction: 'Define PSF engagement scope and budget',
+                status: 'Enterprise implementation support'
+            }
+        ],
         partners: [
             {
                 name: 'Xray Tech',
@@ -218,10 +268,32 @@ function loadSampleData() {
                 submittedDomains: [
                     { account: 'Partnership - Crossbeam Review', domain: '', status: 'active', stage: 'Discovery', priority: 1, lastActivity: '2026-01-09', note: 'Review shared customers' }
                 ]
+            },
+            {
+                name: 'Connex Digital',
+                owner: 'Brandon',
+                active: {
+                    account: 'Partner Services Fund Engagement',
+                    stage: 'Scoping',
+                    dealSize: 10000,
+                    weightedValue: 4000,
+                    lastActivity: '2026-01-09',
+                    nextAction: 'Define PSF engagement scope and budget',
+                    status: 'Enterprise implementation support'
+                },
+                backlog: [],
+                weeklyNote: `<strong>📅 Status: Partner Services Fund Opportunity</strong><br><br>
+<strong>🎯 Partner Assisted Opportunity:</strong><br>
+• Partner Services Fund (PSF) engagement with Connex Digital<br>
+• Connex to provide implementation support for enterprise customers<br>
+• Focus: Helping Enterprise sales when Zapier lacks expertise or bandwidth<br>
+• Active referral partner with $9,237 revenue and 460 referrals in 2025<br><br>
+<strong>✅ Action Items:</strong><br>
+• <strong>Brandon</strong>: Define PSF engagement scope and budget — <em>Due: Jan 20</em><br>
+• <strong>Brandon</strong>: Align with Andrés on partner deliverables — <em>Due: Jan 17</em><br>
+• <strong>Team</strong>: Identify target enterprise customer for PSF pilot — <em>Due: Jan 24</em>`,
+                submittedDomains: []
             }
-        ],
-        recentWins: [
-            { partner: 'Pyxis', account: 'TechStart Pilot', dealSize: 5000, closeDate: '2025-12-15', salesCycleDays: 45 }
         ],
         lastUpdated: '2026-01-09T14:00:00.000Z'
     };
@@ -230,11 +302,11 @@ function loadSampleData() {
 function renderDashboard() {
     updateLastUpdated(dashboardData.lastUpdated);
     renderTargetStrip();
-    renderFocus();
+    renderPartnerSourced();
+    renderPartnerAssisted();
     renderBacklog();
     renderDomains();
     renderWeeklyUpdates();
-    renderRecentWins();
 }
 
 function renderTargetStrip() {
@@ -251,30 +323,40 @@ function renderTargetStrip() {
     setText('coverageRatio', `${coverage}x`);
 }
 
-function renderFocus() {
-    const container = document.getElementById('focusContainer');
+function renderPartnerSourced() {
+    const container = document.getElementById('partnerSourcedContainer');
+    if (!container) return;
     container.innerHTML = '';
 
-    dashboardData.partners.forEach(partner => {
+    (dashboardData.partnerSourced || []).forEach(opp => {
         const card = document.createElement('div');
         card.className = 'metric-card focus-card';
+        card.innerHTML = `
+            <div class="metric-label">${opp.partner} — owner: ${opp.owner}</div>
+            <div class="metric-value">${opp.account}</div>
+            <div class="metric-subtext">${opp.stage} • ${formatCurrency(opp.dealSize)} (${formatCurrency(opp.weightedValue)} weighted)</div>
+            <div class="metric-subtext">Last activity: ${formatDate(opp.lastActivity)} | Next: ${opp.nextAction}</div>
+            <div class="metric-subtext">${opp.status}</div>
+        `;
+        container.appendChild(card);
+    });
+}
 
-        if (partner.active) {
-            const a = partner.active;
-            card.innerHTML = `
-                <div class="metric-label">${partner.name} — owner: ${partner.owner}</div>
-                <div class="metric-value">${a.account}</div>
-                <div class="metric-subtext">${a.stage} • ${formatCurrency(a.dealSize)} (${formatCurrency(a.weightedValue)} weighted)</div>
-                <div class="metric-subtext">Last activity: ${formatDate(a.lastActivity)} | Next: ${a.nextAction}</div>
-                <div class="metric-subtext">${a.status}</div>
-            `;
-        } else {
-            card.innerHTML = `
-                <div class="metric-label">${partner.name} — owner: ${partner.owner}</div>
-                <div class="metric-subtext">No active upmarket opp. Activate top backlog pick.</div>
-            `;
-        }
+function renderPartnerAssisted() {
+    const container = document.getElementById('partnerAssistedContainer');
+    if (!container) return;
+    container.innerHTML = '';
 
+    (dashboardData.partnerAssisted || []).forEach(opp => {
+        const card = document.createElement('div');
+        card.className = 'metric-card focus-card assisted';
+        card.innerHTML = `
+            <div class="metric-label">${opp.partner} — owner: ${opp.owner}</div>
+            <div class="metric-value">${opp.account}</div>
+            <div class="metric-subtext">${opp.stage} • ${formatCurrency(opp.dealSize)} (${formatCurrency(opp.weightedValue)} weighted)</div>
+            <div class="metric-subtext">Last activity: ${formatDate(opp.lastActivity)} | Next: ${opp.nextAction}</div>
+            <div class="metric-subtext">${opp.status}</div>
+        `;
         container.appendChild(card);
     });
 }
@@ -378,27 +460,6 @@ function renderWeeklyUpdates() {
             <div class="metric-subtext">${p.weeklyNote || 'No update yet.'}</div>
         `;
         container.appendChild(note);
-    });
-}
-
-function renderRecentWins() {
-    const tbody = document.getElementById('recentWinsBody');
-    tbody.innerHTML = '';
-
-    if (!dashboardData.recentWins || dashboardData.recentWins.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="loading">No wins yet</td></tr>';
-        return;
-    }
-
-    dashboardData.recentWins.forEach(win => {
-        const row = tbody.insertRow();
-        row.innerHTML = `
-            <td>${win.partner}</td>
-            <td>${win.account}</td>
-            <td>${formatCurrency(win.dealSize)}</td>
-            <td>${formatDate(win.closeDate)}</td>
-            <td>${win.salesCycleDays || '-'} days</td>
-        `;
     });
 }
 
