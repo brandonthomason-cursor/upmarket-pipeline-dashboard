@@ -2,122 +2,109 @@
   "quarterlyTarget": 20000,
   "summary": {
     "closedWon": 0,
-    "activeCount": 1,
-    "weightedPipeline": 0
+    "activeCount": 4,
+    "weightedPipeline": 10750
   },
+  "partnerSourced": [
+    {
+      "partner": "Xray Tech",
+      "owner": "Brandon",
+      "account": "Green Check Verified",
+      "stage": "Discovery",
+      "dealSize": 12000,
+      "weightedValue": 3000,
+      "lastActivity": "2026-01-09",
+      "nextAction": "Prep MCP pitch deck, get enablement from Chris Ondera",
+      "status": "Verbal YES for MCP sales meeting"
+    },
+    {
+      "partner": "Pyxis",
+      "owner": "Brandon",
+      "account": "TBD - Austin Account",
+      "stage": "Account Selection",
+      "dealSize": 10000,
+      "weightedValue": 0,
+      "lastActivity": "2026-01-09",
+      "nextAction": "Parker to identify Austin-based accounts (1 week)",
+      "status": "Selecting target account"
+    },
+    {
+      "partner": "Orium (Myplanet)",
+      "owner": "Michael Shen",
+      "account": "Partnership Activation",
+      "stage": "Discovery",
+      "dealSize": 15000,
+      "weightedValue": 3750,
+      "lastActivity": "2026-01-09",
+      "nextAction": "Ryan to bring customer examples; Review Crossbeam",
+      "status": "Follow-up meeting scheduled"
+    }
+  ],
+  "partnerAssisted": [
+    {
+      "partner": "Connex Digital",
+      "owner": "Brandon",
+      "account": "Partner Services Fund Engagement",
+      "stage": "Scoping",
+      "dealSize": 10000,
+      "weightedValue": 4000,
+      "lastActivity": "2026-01-09",
+      "nextAction": "Define PSF engagement scope and budget",
+      "status": "Enterprise implementation support"
+    }
+  ],
   "partners": [
     {
       "name": "Xray Tech",
       "owner": "Brandon",
-      "active": {
-        "account": "Green Check",
-        "stage": "Discovery",
-        "dealSize": 0,
-        "weightedValue": 0,
-        "lastActivity": "2026-01-05",
-        "nextAction": "Align MCP pitch with Sales; schedule co-founder/CSO meeting",
-        "status": "On track"
-      },
-      "backlog": [],
-      "weeklyNote": "Green Check verbal yes for MCP-focused sales meeting; aligning MCP pitch with Sales then scheduling.",
-      "submittedDomains": [
-        {
-          "account": "Green Check",
-          "domain": "greencheckverified.com",
-          "status": "active",
-          "stage": "Discovery",
-          "priority": 1,
-          "lastActivity": "2026-01-05",
-          "note": "Primary focus"
-        },
-        { "account": "Apollo Global", "domain": "apollo.com", "status": "queued", "stage": "Unscreened", "priority": 2, "lastActivity": null, "note": "" },
-        { "account": "CCAHA", "domain": "ccaha.org", "status": "queued", "stage": "Unscreened", "priority": 3, "lastActivity": null, "note": "" },
-        { "account": "Level Agency", "domain": "level.agency", "status": "queued", "stage": "Unscreened", "priority": 4, "lastActivity": null, "note": "" },
-        { "account": "MediData", "domain": "medidata.com", "status": "queued", "stage": "Unscreened", "priority": 5, "lastActivity": null, "note": "" },
-        { "account": "Coding Clarified", "domain": "", "status": "queued", "stage": "Unscreened", "priority": 6, "lastActivity": null, "note": "" },
-        { "account": "SEM Rush", "domain": "semrush.com", "status": "queued", "stage": "Unscreened", "priority": 7, "lastActivity": null, "note": "" },
-        { "account": "Try Penny", "domain": "trypennie.com", "status": "queued", "stage": "Unscreened", "priority": 8, "lastActivity": null, "note": "" },
-        { "account": "Boston BioPr", "domain": "", "status": "queued", "stage": "Unscreened", "priority": 9, "lastActivity": null, "note": "" },
-        { "account": "US Pet Food", "domain": "uspetfood.com", "status": "queued", "stage": "Unscreened", "priority": 10, "lastActivity": null, "note": "" },
-        { "account": "Journey Live", "domain": "journey.live", "status": "queued", "stage": "Unscreened", "priority": 11, "lastActivity": null, "note": "" },
-        { "account": "SoloMID", "domain": "solomid.net", "status": "queued", "stage": "Unscreened", "priority": 12, "lastActivity": null, "note": "" },
-        { "account": "Ben & Jerry's", "domain": "", "status": "queued", "stage": "Unscreened", "priority": 13, "lastActivity": null, "note": "" },
-        { "account": "O'Reilly Media", "domain": "oreilly.com", "status": "queued", "stage": "Unscreened", "priority": 14, "lastActivity": null, "note": "" },
-        { "account": "S&S Activewear", "domain": "ssactivewear.com", "status": "queued", "stage": "Unscreened", "priority": 15, "lastActivity": null, "note": "" },
-        { "account": "AY Media", "domain": "aymag.com", "status": "queued", "stage": "Unscreened", "priority": 16, "lastActivity": null, "note": "" },
-        { "account": "CCRES", "domain": "ccres.org", "status": "queued", "stage": "Unscreened", "priority": 17, "lastActivity": null, "note": "" },
-        { "account": "Acumen Fina", "domain": "acumenfa.com", "status": "queued", "stage": "Unscreened", "priority": 18, "lastActivity": null, "note": "" },
-        { "account": "Custodia Bank", "domain": "custodiabank.com", "status": "queued", "stage": "Unscreened", "priority": 19, "lastActivity": null, "note": "" },
-        { "account": "128 Plumbing", "domain": "call128.com", "status": "queued", "stage": "Unscreened", "priority": 20, "lastActivity": null, "note": "" },
-        { "account": "Dirty Hands", "domain": "dhstoresupport.com", "status": "queued", "stage": "Unscreened", "priority": 21, "lastActivity": null, "note": "" },
-        { "account": "Munipqlk", "domain": "", "status": "queued", "stage": "Unscreened", "priority": 22, "lastActivity": null, "note": "" },
-        { "account": "Feed My Star", "domain": "fmsc.org", "status": "queued", "stage": "Unscreened", "priority": 23, "lastActivity": null, "note": "" },
-        { "account": "Utility Cloud", "domain": "amcsgroup.com", "status": "queued", "stage": "Unscreened", "priority": 24, "lastActivity": null, "note": "" },
-        { "account": "Avanti Bank", "domain": "", "status": "queued", "stage": "Unscreened", "priority": 25, "lastActivity": null, "note": "" },
-        { "account": "Arc Southeast", "domain": "arc-southeast.org", "status": "queued", "stage": "Unscreened", "priority": 26, "lastActivity": null, "note": "" },
-        { "account": "1800Accountant", "domain": "1800accountant.com", "status": "queued", "stage": "Unscreened", "priority": 27, "lastActivity": null, "note": "Partner assisted" },
-        { "account": "Hiperbaric", "domain": "", "status": "queued", "stage": "Unscreened", "priority": 28, "lastActivity": null, "note": "Partner assisted" },
-        { "account": "Hexagon", "domain": "", "status": "queued", "stage": "Unscreened", "priority": 29, "lastActivity": null, "note": "Partner assisted" }
+      "backlog": [
+        { "account": "Global Solutions", "stage": "Qualified", "priority": 1 },
+        { "account": "FinServe Co", "stage": "Discovery", "priority": 2 }
       ]
     },
     {
       "name": "Pyxis",
       "owner": "Brandon",
-      "active": null,
-      "backlog": [],
-      "weeklyNote": "Primary account to be confirmed this week.",
-      "submittedDomains": [
-        { "account": "SolidCAM", "domain": "solidcam.com", "status": "queued", "stage": "Unscreened", "priority": 1, "lastActivity": null, "note": "" },
-        { "account": "US Anti-Doping Agency (USADA)", "domain": "usada.org", "status": "queued", "stage": "Unscreened", "priority": 2, "lastActivity": null, "note": "" },
-        { "account": "Valiantys", "domain": "valiantys.com", "status": "queued", "stage": "Unscreened", "priority": 3, "lastActivity": null, "note": "" },
-        { "account": "CyberFortress", "domain": "cyberfortress.com", "status": "queued", "stage": "Unscreened", "priority": 4, "lastActivity": null, "note": "" },
-        { "account": "Trimark USA", "domain": "trimarkusa.com", "status": "queued", "stage": "Unscreened", "priority": 5, "lastActivity": null, "note": "" },
-        { "account": "Deriva Energy", "domain": "derivaenergy.com", "status": "queued", "stage": "Unscreened", "priority": 6, "lastActivity": null, "note": "" },
-        { "account": "Regal Plastics", "domain": "regal-plastics.com", "status": "queued", "stage": "Unscreened", "priority": 7, "lastActivity": null, "note": "" },
-        { "account": "VMG Health", "domain": "vmghealth.com", "status": "queued", "stage": "Unscreened", "priority": 8, "lastActivity": null, "note": "" },
-        { "account": "Mohr Partners", "domain": "mohrpartners.com", "status": "queued", "stage": "Unscreened", "priority": 9, "lastActivity": null, "note": "" },
-        { "account": "Aldevron", "domain": "aldevron.com", "status": "queued", "stage": "Unscreened", "priority": 10, "lastActivity": null, "note": "" },
-        { "account": "DAS Health", "domain": "dashealth.com", "status": "queued", "stage": "Unscreened", "priority": 11, "lastActivity": null, "note": "" },
-        { "account": "Security 101", "domain": "security101.com", "status": "queued", "stage": "Unscreened", "priority": 12, "lastActivity": null, "note": "" },
-        { "account": "EnergyHub", "domain": "energyhub.com", "status": "queued", "stage": "Unscreened", "priority": 13, "lastActivity": null, "note": "" },
-        { "account": "Palo Alto University", "domain": "paloaltou.edu", "status": "queued", "stage": "Unscreened", "priority": 14, "lastActivity": null, "note": "" },
-        { "account": "TDIndustries", "domain": "tdindustries.com", "status": "queued", "stage": "Unscreened", "priority": 15, "lastActivity": null, "note": "" },
-        { "account": "Overhaul", "domain": "over-haul.com", "status": "queued", "stage": "Unscreened", "priority": 16, "lastActivity": null, "note": "" }
+      "backlog": [
+        { "account": "MidMarket Labs", "stage": "Qualified", "priority": 1 },
+        { "account": "Northwind AI", "stage": "Qualified", "priority": 2 }
       ]
     },
     {
       "name": "iZeno",
       "owner": "Michael Shen",
-      "active": null,
-      "backlog": [],
-      "weeklyNote": "No active upmarket opp yet; reviewing list with Michael.",
-      "submittedDomains": [
-        { "account": "APAC Retailer", "domain": "apacretailer.com", "status": "queued", "stage": "Unscreened", "priority": 1, "lastActivity": null, "note": "Pending activation" },
-        { "account": "DataOps Co", "domain": "dataops.co", "status": "queued", "stage": "Unscreened", "priority": 2, "lastActivity": null, "note": "" }
+      "backlog": [
+        { "account": "APAC Retailer", "stage": "Qualified", "priority": 1 },
+        { "account": "DataOps Co", "stage": "Discovery", "priority": 2 }
       ]
     },
     {
-      "name": "Orium",
+      "name": "Orium (Myplanet)",
       "owner": "Michael Shen",
-      "active": null,
-      "backlog": [],
-      "weeklyNote": "Queue ready once iZeno activates.",
-      "submittedDomains": [
-        { "account": "Commerce Cloud", "domain": "commercecloud.com", "status": "queued", "stage": "Qualified", "priority": 1, "lastActivity": null, "note": "Pending activation" }
+      "backlog": [
+        { "account": "Crossbeam Overlap TBD", "stage": "Qualified", "priority": 1 }
       ]
+    },
+    {
+      "name": "Connex Digital",
+      "owner": "Brandon",
+      "backlog": []
     }
   ],
   "recentWins": [],
-  "lastUpdated": "2026-01-05T00:00:00Z"
+  "stageCounts": {
+    "Discovery": 2,
+    "Qualified": 0,
+    "Proposal": 0,
+    "Negotiation": 0,
+    "Scoping": 1,
+    "Account Selection": 1
+  },
+  "pipelineTrend": [
+    { "date": "2025-12-01", "weighted": 5000 },
+    { "date": "2025-12-15", "weighted": 7500 },
+    { "date": "2026-01-01", "weighted": 8500 },
+    { "date": "2026-01-09", "weighted": 10750 }
+  ],
+  "lastUpdated": "2026-01-11T12:00:00.000Z"
 }
-
-
-
-
-
-
-
-
-
-
-
