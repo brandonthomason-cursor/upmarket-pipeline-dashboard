@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 Upmarket Pipeline and Revenue Dashboard</title>
+    <title>2026 Upmarket Pipeline Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="styles.css">
     <script src="config.js"></script>
@@ -24,67 +24,84 @@
         if (window.self !== window.top) {
             document.documentElement.classList.add('iframe-mode');
             document.body.classList.add('iframe-mode');
-            document.querySelector('.dashboard-container').classList.add('iframe-mode');
         }
     </script>
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Header -->
+        <!-- Header with Filters -->
         <header class="dashboard-header">
-            <h1>Upmarket Pipeline Focus (Q1)</h1>
+            <div class="header-title">
+                <h1>Upmarket Pipeline Dashboard (Q1)</h1>
+            </div>
+            <div class="header-filters">
+                <select id="partnerFilter" class="header-filter">
+                    <option value="">All Partners</option>
+                </select>
+                <select id="stageFilter" class="header-filter">
+                    <option value="">All Stages</option>
+                    <option value="Discovery">Discovery</option>
+                    <option value="Qualified">Qualified</option>
+                    <option value="Proposal">Proposal</option>
+                    <option value="Negotiation">Negotiation</option>
+                    <option value="Closed Won">Closed Won</option>
+                </select>
+                <input type="date" id="dateFrom" class="header-filter" title="From Date">
+                <input type="date" id="dateTo" class="header-filter" title="To Date">
+            </div>
             <div class="header-info">
-                <span class="last-updated">Last Updated: <span id="lastUpdated"></span></span>
-                <button class="btn-refresh" onclick="loadDashboardData()">🔄 Refresh</button>
+                <span class="last-updated">Updated: <span id="lastUpdated"></span></span>
+                <button class="btn-refresh" onclick="loadDashboardData()">Refresh</button>
             </div>
         </header>
 
-        <!-- Partner filter -->
-        <div class="filter-bar">
-            <select id="partnerFilter">
-                <option value="">All partners</option>
-            </select>
-        </div>
-
-        <!-- Q1 Target Strip -->
-        <section class="metrics-section">
-            <h2>Q1 Upmarket Target</h2>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-label">Target <span class="info-icon" data-tip="Q1 upmarket revenue goal.">i</span></div>
-                    <div class="metric-value" id="quarterlyTarget">$20,000</div>
+        <!-- KPI Cards Row -->
+        <section class="kpi-section">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Q1 Target</div>
+                    <div class="kpi-value" id="quarterlyTarget">$20,000</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-label">Closed Won <span class="info-icon" data-tip="Sum of closed-won upmarket deals this quarter.">i</span></div>
-                    <div class="metric-value success" id="closedWon">$0</div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Closed Won</div>
+                    <div class="kpi-value success" id="closedWon">$0</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-label">Gap to Goal <span class="info-icon" data-tip="Target minus closed won.">i</span></div>
-                    <div class="metric-value" id="gapToGoal">$0</div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Active Opps</div>
+                    <div class="kpi-value" id="activeCount">0</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-label">Active (of 3) <span class="info-icon" data-tip="Number of currently active upmarket opportunities (one-at-a-time, max 3 candidates).">i</span></div>
-                    <div class="metric-value" id="activeCount">0</div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Weighted Pipeline</div>
+                    <div class="kpi-value" id="weightedPipeline">$0</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-label">Weighted Pipeline <span class="info-icon" data-tip="Sum of active deal values × stage probability (filtered to selected partner if applied).">i</span></div>
-                    <div class="metric-value" id="weightedPipeline">$0</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Forecast (Closed + Weighted) <span class="info-icon" data-tip="Closed won plus weighted pipeline; simple forecast indicator.">i</span></div>
-                    <div class="metric-value" id="forecastTotal">$0</div>
-                    <div class="metric-subtext" id="forecastStatus"></div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Coverage <span class="info-icon" data-tip="(Closed Won + Weighted Pipeline) ÷ Target.">i</span></div>
-                    <div class="metric-value" id="coverageRatio">0.0x</div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Coverage</div>
+                    <div class="kpi-value" id="coverageRatio">0.0x</div>
                 </div>
             </div>
         </section>
 
-        <!-- Recent wins -->
-        <section class="deals-section">
-            <h2>Recent Wins (30/90d)</h2>
+        <!-- Partner Sourced Opportunities -->
+        <section class="opportunities-section">
+            <h2>Partner Sourced Opportunities</h2>
+            <p class="section-description">Deals driven by partners — partner brings the opportunity to Zapier</p>
+            <div class="opps-grid" id="partnerSourcedContainer">
+                <!-- Partner sourced cards injected here -->
+            </div>
+        </section>
+
+        <!-- Partner Assisted Opportunities -->
+        <section class="opportunities-section">
+            <h2>Partner Assisted Opportunities</h2>
+            <p class="section-description">Deals where partners help with Zapier's pipeline — Partner Services Fund (PSF) engagements</p>
+            <div class="opps-grid" id="partnerAssistedContainer">
+                <!-- Partner assisted cards injected here -->
+            </div>
+        </section>
+
+        <!-- Recent Wins (hidden until data exists) -->
+        <section class="opportunities-section hidden" id="recentWinsSection">
+            <h2>Recent Wins</h2>
             <div class="table-container">
                 <table class="data-table">
                     <thead>
@@ -103,23 +120,25 @@
             </div>
         </section>
 
-        <!-- Current Focus: one-at-a-time deals -->
-        <section class="metrics-section">
-            <h2>Current Focus (One-at-a-Time)</h2>
-            <div class="focus-grid" id="focusContainer">
-                <!-- Partner focus cards injected here -->
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Pipeline Funnel</h3>
+                    <div class="chart-container">
+                        <canvas id="funnelChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Weighted Pipeline Trend</h3>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Weekly updates -->
-        <section class="metrics-section">
-            <h2>This Week’s Updates</h2>
-            <div class="updates-grid" id="weeklyUpdates">
-                <!-- Weekly notes injected here -->
-            </div>
-        </section>
-
-        <!-- Backlog queue -->
+        <!-- Backlog Queue -->
         <section class="opportunities-section">
             <h2>Backlog Queue (Next Up)</h2>
             <div class="table-container">
@@ -139,27 +158,11 @@
             </div>
         </section>
 
-        <!-- Submitted Domains Funnel -->
+        <!-- Weekly Updates -->
         <section class="opportunities-section">
-            <h2>Submitted Upmarket Domains (Funnel)</h2>
-            <div id="domainSummary" class="domain-summary"></div>
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Partner</th>
-                            <th>Account/Domain</th>
-                            <th>Status</th>
-                            <th>Stage</th>
-                            <th>Priority</th>
-                            <th>Last Activity</th>
-                            <th>Note</th>
-                        </tr>
-                    </thead>
-                    <tbody id="domainsBody">
-                        <tr><td colspan="7" class="loading">Loading submitted domains...</td></tr>
-                    </tbody>
-                </table>
+            <h2>This Week's Updates</h2>
+            <div class="updates-grid" id="weeklyUpdates">
+                <!-- Weekly notes injected here -->
             </div>
         </section>
     </div>
@@ -167,4 +170,3 @@
     <script src="dashboard.js"></script>
 </body>
 </html>
-
