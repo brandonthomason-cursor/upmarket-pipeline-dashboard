@@ -63,8 +63,8 @@ function loadSampleData() {
         quarterlyTarget: 20000,
         summary: {
             closedWon: 0,
-            activeCount: 4,
-            weightedPipeline: 10750
+            activeCount: 2,
+            weightedPipeline: 45000
         },
         partnerSourced: [
             {
@@ -77,100 +77,46 @@ function loadSampleData() {
                 lastActivity: '2026-01-09',
                 nextAction: 'Prep MCP pitch deck, get enablement from Chris Ondera',
                 status: 'Verbal YES for MCP sales meeting'
-            },
-            {
-                partner: 'Pyxis',
-                owner: 'Brandon',
-                account: 'TBD - Austin Account',
-                stage: 'Account Selection',
-                dealSize: 10000,
-                weightedValue: 0,
-                lastActivity: '2026-01-09',
-                nextAction: 'Parker to identify Austin-based accounts (1 week)',
-                status: 'Selecting target account'
-            },
-            {
-                partner: 'Orium (Myplanet)',
-                owner: 'Michael Shen',
-                account: 'Partnership Activation',
-                stage: 'Discovery',
-                dealSize: 15000,
-                weightedValue: 3750,
-                lastActivity: '2026-01-09',
-                nextAction: 'Ryan to bring customer examples; Review Crossbeam',
-                status: 'Follow-up meeting scheduled'
             }
         ],
         partnerAssisted: [
             {
                 partner: 'Connex Digital',
                 owner: 'Brandon',
-                account: 'Partner Services Fund Engagement',
-                stage: 'Scoping',
-                dealSize: 10000,
-                weightedValue: 4000,
-                lastActivity: '2026-01-09',
-                nextAction: 'Define PSF engagement scope and budget',
-                status: 'Enterprise implementation support'
+                account: 'LEARN Behavioral',
+                stage: 'Validation',
+                dealSize: 60000,
+                weightedValue: 42000,
+                probability: 70,
+                lastActivity: '2026-01-05',
+                nextAction: 'MSA + Order Form iteration with LEARN counsel; CHRO final approval',
+                status: 'Legal redlines in progress',
+                psfInvestment: 5000,
+                psfHours: 20,
+                psfDetails: 'RyRo-approved exception: $5k SOW (~20 hrs) for Phase 1 UKG Pro integration. Connex builds private UKG Pro connector + new-hire workflow.',
+                dealOwner: 'Jaime Crespo',
+                forecastCategory: 'Commit',
+                context: 'Net-new $60k Enterprise opportunity. Normal PSF cap ($1k) waived given deal size and critical UKG integration gap.'
             }
         ],
         partners: [
-            {
-                name: 'Xray Tech',
-                owner: 'Brandon',
-                backlog: [
-                    { account: 'Global Solutions', stage: 'Qualified', priority: 1 },
-                    { account: 'FinServe Co', stage: 'Discovery', priority: 2 }
-                ],
-                weeklyNote: 'Jan 9: Green Check Verified - Verbal YES for MCP sales meeting.'
-            },
-            {
-                name: 'Pyxis',
-                owner: 'Brandon',
-                backlog: [
-                    { account: 'MidMarket Labs', stage: 'Qualified', priority: 1 },
-                    { account: 'Northwind AI', stage: 'Qualified', priority: 2 }
-                ],
-                weeklyNote: 'Jan 9: Focus on proving co-sell motion with ONE Austin-based account.'
-            },
-            {
-                name: 'iZeno',
-                owner: 'Michael Shen',
-                backlog: [
-                    { account: 'APAC Retailer', stage: 'Qualified', priority: 1 },
-                    { account: 'DataOps Co', stage: 'Discovery', priority: 2 }
-                ],
-                weeklyNote: 'Pending Activation: No active upmarket opportunity yet.'
-            },
-            {
-                name: 'Orium (Myplanet)',
-                owner: 'Michael Shen',
-                backlog: [
-                    { account: 'Crossbeam Overlap TBD', stage: 'Qualified', priority: 1 }
-                ],
-                weeklyNote: 'Jan 9 Partnership Kickoff: 250-person professional services firm.'
-            },
-            {
-                name: 'Connex Digital',
-                owner: 'Brandon',
-                backlog: [],
-                weeklyNote: 'Partner Services Fund Opportunity: PSF engagement for enterprise support.'
-            }
+            { name: 'Xray Tech', owner: 'Brandon', backlog: [] },
+            { name: 'Connex Digital', owner: 'Brandon', backlog: [] }
         ],
         recentWins: [],
         pipelineTrend: [
             { date: '2025-12-01', weighted: 5000 },
             { date: '2025-12-15', weighted: 7500 },
-            { date: '2026-01-01', weighted: 8500 },
-            { date: '2026-01-09', weighted: 10750 }
+            { date: '2026-01-01', weighted: 35000 },
+            { date: '2026-01-11', weighted: 45000 }
         ],
         stageCounts: {
-            'Discovery': 2,
+            'Discovery': 1,
             'Qualified': 0,
             'Proposal': 0,
             'Negotiation': 0,
-            'Scoping': 1,
-            'Account Selection': 1
+            'Validation': 1,
+            'Account Selection': 0
         },
         lastUpdated: new Date().toISOString()
     };
@@ -233,7 +179,7 @@ function populatePartnerFilter() {
     });
 }
 
-function applyFilters(items) {
+function applyFilters(items, type = 'opp') {
     if (!items) return [];
     
     return items.filter(item => {
@@ -290,7 +236,7 @@ function renderKPIs() {
     setText('closedWon', formatCurrency(closed));
     setText('activeCount', activeCount);
     setText('weightedPipeline', formatCurrency(weighted));
-    setText('coverageRatio', coverage + 'x');
+    setText('coverageRatio', `${coverage}x`);
 }
 
 function renderPartnerSourced() {
@@ -308,7 +254,29 @@ function renderPartnerSourced() {
     opps.forEach(opp => {
         const card = document.createElement('div');
         card.className = 'opp-card';
-        card.innerHTML = '<div class="opp-card-header"><span class="opp-partner">' + opp.partner + ' &bull; ' + opp.owner + '</span><span class="opp-stage">' + opp.stage + '</span></div><div class="opp-account">' + opp.account + '</div><div class="opp-metrics"><div class="opp-metric"><span class="opp-metric-label">Deal Size</span><span class="opp-metric-value">' + formatCurrency(opp.dealSize) + '</span></div><div class="opp-metric"><span class="opp-metric-label">Weighted</span><span class="opp-metric-value">' + formatCurrency(opp.weightedValue) + '</span></div><div class="opp-metric"><span class="opp-metric-label">Last Activity</span><span class="opp-metric-value">' + formatDate(opp.lastActivity) + '</span></div></div><div class="opp-details">' + opp.status + '</div><div class="opp-next-action"><strong>Next:</strong> ' + opp.nextAction + '</div>';
+        card.innerHTML = `
+            <div class="opp-card-header">
+                <span class="opp-partner">${opp.partner} &bull; ${opp.owner}</span>
+                <span class="opp-stage">${opp.stage}</span>
+            </div>
+            <div class="opp-account">${opp.account}</div>
+            <div class="opp-metrics">
+                <div class="opp-metric">
+                    <span class="opp-metric-label">Deal Size</span>
+                    <span class="opp-metric-value">${formatCurrency(opp.dealSize)}</span>
+                </div>
+                <div class="opp-metric">
+                    <span class="opp-metric-label">Weighted</span>
+                    <span class="opp-metric-value">${formatCurrency(opp.weightedValue)}</span>
+                </div>
+                <div class="opp-metric">
+                    <span class="opp-metric-label">Last Activity</span>
+                    <span class="opp-metric-value">${formatDate(opp.lastActivity)}</span>
+                </div>
+            </div>
+            <div class="opp-details">${opp.status}</div>
+            <div class="opp-next-action"><strong>Next:</strong> ${opp.nextAction}</div>
+        `;
         container.appendChild(card);
     });
 }
@@ -328,7 +296,65 @@ function renderPartnerAssisted() {
     opps.forEach(opp => {
         const card = document.createElement('div');
         card.className = 'opp-card assisted';
-        card.innerHTML = '<div class="opp-card-header"><span class="opp-partner">' + opp.partner + ' &bull; ' + opp.owner + '</span><span class="opp-stage">' + opp.stage + '</span></div><div class="opp-account">' + opp.account + '</div><div class="opp-metrics"><div class="opp-metric"><span class="opp-metric-label">Deal Size</span><span class="opp-metric-value">' + formatCurrency(opp.dealSize) + '</span></div><div class="opp-metric"><span class="opp-metric-label">Weighted</span><span class="opp-metric-value">' + formatCurrency(opp.weightedValue) + '</span></div><div class="opp-metric"><span class="opp-metric-label">Last Activity</span><span class="opp-metric-value">' + formatDate(opp.lastActivity) + '</span></div></div><div class="opp-details">' + opp.status + '</div><div class="opp-next-action"><strong>Next:</strong> ' + opp.nextAction + '</div>';
+        
+        // Build PSF investment section if applicable
+        let psfSection = '';
+        if (opp.psfInvestment) {
+            psfSection = `
+                <div class="opp-psf">
+                    <div class="opp-psf-header">
+                        <span class="psf-badge">PSF Investment</span>
+                        <span class="psf-amount">${formatCurrency(opp.psfInvestment)} (${opp.psfHours || 0} hrs)</span>
+                    </div>
+                    ${opp.psfDetails ? `<div class="opp-psf-details">${opp.psfDetails}</div>` : ''}
+                </div>
+            `;
+        }
+        
+        // Build deal owner/forecast section
+        let dealInfoSection = '';
+        if (opp.dealOwner || opp.forecastCategory) {
+            dealInfoSection = `
+                <div class="opp-deal-info">
+                    ${opp.dealOwner ? `<span class="deal-owner">AE: ${opp.dealOwner}</span>` : ''}
+                    ${opp.forecastCategory ? `<span class="forecast-category ${opp.forecastCategory.toLowerCase()}">${opp.forecastCategory}</span>` : ''}
+                    ${opp.probability ? `<span class="deal-probability">${opp.probability}% probability</span>` : ''}
+                </div>
+            `;
+        }
+        
+        // Build context section
+        let contextSection = '';
+        if (opp.context) {
+            contextSection = `<div class="opp-context">${opp.context}</div>`;
+        }
+        
+        card.innerHTML = `
+            <div class="opp-card-header">
+                <span class="opp-partner">${opp.partner} &bull; ${opp.owner}</span>
+                <span class="opp-stage">${opp.stage}</span>
+            </div>
+            <div class="opp-account">${opp.account}</div>
+            ${dealInfoSection}
+            <div class="opp-metrics">
+                <div class="opp-metric">
+                    <span class="opp-metric-label">Deal Size</span>
+                    <span class="opp-metric-value">${formatCurrency(opp.dealSize)}</span>
+                </div>
+                <div class="opp-metric">
+                    <span class="opp-metric-label">Weighted</span>
+                    <span class="opp-metric-value">${formatCurrency(opp.weightedValue)}</span>
+                </div>
+                <div class="opp-metric">
+                    <span class="opp-metric-label">Last Activity</span>
+                    <span class="opp-metric-value">${formatDate(opp.lastActivity)}</span>
+                </div>
+            </div>
+            ${psfSection}
+            <div class="opp-details">${opp.status}</div>
+            ${contextSection}
+            <div class="opp-next-action"><strong>Next:</strong> ${opp.nextAction}</div>
+        `;
         container.appendChild(card);
     });
 }
@@ -354,7 +380,13 @@ function renderRecentWins() {
 
     filteredWins.forEach(win => {
         const row = tbody.insertRow();
-        row.innerHTML = '<td>' + win.partner + '</td><td>' + win.account + '</td><td>' + formatCurrency(win.dealSize) + '</td><td>' + formatDate(win.closeDate) + '</td><td>' + (win.salesCycleDays || '-') + ' days</td>';
+        row.innerHTML = `
+            <td>${win.partner}</td>
+            <td>${win.account}</td>
+            <td>${formatCurrency(win.dealSize)}</td>
+            <td>${formatDate(win.closeDate)}</td>
+            <td>${win.salesCycleDays || '-'} days</td>
+        `;
     });
 }
 
@@ -368,7 +400,7 @@ function renderFunnelChart() {
     if (!ctx) return;
 
     const stageCounts = dashboardData.stageCounts || {};
-    const stages = ['Discovery', 'Qualified', 'Proposal', 'Negotiation', 'Scoping', 'Account Selection'];
+    const stages = ['Discovery', 'Qualified', 'Proposal', 'Negotiation', 'Validation', 'Account Selection'];
     const counts = stages.map(s => stageCounts[s] || 0);
 
     if (funnelChart) funnelChart.destroy();
@@ -380,7 +412,14 @@ function renderFunnelChart() {
             datasets: [{
                 label: 'Opportunities',
                 data: counts,
-                backgroundColor: ['rgba(102,126,234,0.8)','rgba(118,75,162,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)','rgba(59,130,246,0.8)','rgba(147,51,234,0.8)'],
+                backgroundColor: [
+                    'rgba(102, 126, 234, 0.8)',
+                    'rgba(118, 75, 162, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(147, 51, 234, 0.8)'
+                ],
                 borderRadius: 6
             }]
         },
@@ -389,7 +428,10 @@ function renderFunnelChart() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { display: false } }, y: { grid: { display: false } } }
+            scales: {
+                x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { display: false } },
+                y: { grid: { display: false } }
+            }
         }
     });
 }
@@ -411,11 +453,11 @@ function renderTrendChart() {
             datasets: [{
                 label: 'Weighted Pipeline',
                 data: values,
-                borderColor: 'rgba(102,126,234,1)',
-                backgroundColor: 'rgba(102,126,234,0.1)',
+                borderColor: 'rgba(102, 126, 234, 1)',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: 'rgba(102,126,234,1)',
+                pointBackgroundColor: 'rgba(102, 126, 234, 1)',
                 pointBorderColor: '#fff',
                 pointBorderWidth: 2,
                 pointRadius: 5
@@ -425,7 +467,13 @@ function renderTrendChart() {
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: { x: { grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: function(v) { return '$' + v.toLocaleString(); } } } }
+            scales: {
+                x: { grid: { display: false } },
+                y: {
+                    beginAtZero: true,
+                    ticks: { callback: v => '$' + v.toLocaleString() }
+                }
+            }
         }
     });
 }
@@ -460,10 +508,15 @@ function renderBacklog() {
         if (!prev || prev.partner !== item.partner) {
             const headerRow = tbody.insertRow();
             headerRow.className = 'group-row';
-            headerRow.innerHTML = '<td colspan="4">' + item.partner + '</td>';
+            headerRow.innerHTML = `<td colspan="4">${item.partner}</td>`;
         }
         const row = tbody.insertRow();
-        row.innerHTML = '<td>' + item.partner + '</td><td>' + item.account + '</td><td>' + item.stage + '</td><td>' + (item.priority || '-') + '</td>';
+        row.innerHTML = `
+            <td>${item.partner}</td>
+            <td>${item.account}</td>
+            <td>${item.stage}</td>
+            <td>${item.priority || '-'}</td>
+        `;
     });
 }
 
@@ -479,12 +532,17 @@ function renderWeeklyUpdates() {
         content: p.weeklyNote || 'No update yet.'
     }));
 
-    const filteredNotes = filters.partner ? notes.filter(n => n.partner === filters.partner) : notes;
+    const filteredNotes = filters.partner 
+        ? notes.filter(n => n.partner === filters.partner)
+        : notes;
 
     filteredNotes.forEach(note => {
         const card = document.createElement('div');
         card.className = 'update-card';
-        card.innerHTML = '<div class="update-card-header">' + note.partner + ' &mdash; ' + note.owner + '</div><div class="update-card-content">' + note.content + '</div>';
+        card.innerHTML = `
+            <div class="update-card-header">${note.partner} &mdash; ${note.owner}</div>
+            <div class="update-card-content">${note.content}</div>
+        `;
         container.appendChild(card);
     });
 }
@@ -499,7 +557,12 @@ function setText(id, value) {
 }
 
 function formatCurrency(value) {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value || 0);
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(value || 0);
 }
 
 function formatDate(dateString) {
