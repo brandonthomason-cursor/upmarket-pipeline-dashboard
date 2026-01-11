@@ -2,8 +2,8 @@
   "quarterlyTarget": 20000,
   "summary": {
     "closedWon": 0,
-    "activeCount": 4,
-    "weightedPipeline": 10750
+    "activeCount": 2,
+    "weightedPipeline": 45000
   },
   "partnerSourced": [
     {
@@ -16,41 +16,26 @@
       "lastActivity": "2026-01-09",
       "nextAction": "Prep MCP pitch deck, get enablement from Chris Ondera",
       "status": "Verbal YES for MCP sales meeting"
-    },
-    {
-      "partner": "Pyxis",
-      "owner": "Brandon",
-      "account": "TBD - Austin Account",
-      "stage": "Account Selection",
-      "dealSize": 10000,
-      "weightedValue": 0,
-      "lastActivity": "2026-01-09",
-      "nextAction": "Parker to identify Austin-based accounts (1 week)",
-      "status": "Selecting target account"
-    },
-    {
-      "partner": "Orium (Myplanet)",
-      "owner": "Michael Shen",
-      "account": "Partnership Activation",
-      "stage": "Discovery",
-      "dealSize": 15000,
-      "weightedValue": 3750,
-      "lastActivity": "2026-01-09",
-      "nextAction": "Ryan to bring customer examples; Review Crossbeam",
-      "status": "Follow-up meeting scheduled"
     }
   ],
   "partnerAssisted": [
     {
       "partner": "Connex Digital",
       "owner": "Brandon",
-      "account": "Partner Services Fund Engagement",
-      "stage": "Scoping",
-      "dealSize": 10000,
-      "weightedValue": 4000,
-      "lastActivity": "2026-01-09",
-      "nextAction": "Define PSF engagement scope and budget",
-      "status": "Enterprise implementation support"
+      "account": "LEARN Behavioral",
+      "stage": "Validation",
+      "dealSize": 60000,
+      "weightedValue": 42000,
+      "probability": 70,
+      "lastActivity": "2026-01-05",
+      "nextAction": "MSA + Order Form iteration with LEARN's counsel; CHRO final approval on contract language",
+      "status": "Legal redlines in progress",
+      "psfInvestment": 5000,
+      "psfHours": 20,
+      "psfDetails": "RyRo-approved exception: $5k SOW (~20 hrs) for Phase 1 UKG Pro integration. Connex builds private UKG Pro connector + new-hire workflow in sandbox.",
+      "dealOwner": "Jaime Crespo",
+      "forecastCategory": "Commit",
+      "context": "Net-new $60k Enterprise opportunity. Connex is delivery partner for Phase 1 UKG Pro integration. Normal PSF cap ($1k) waived given deal size and critical UKG integration gap."
     }
   ],
   "partners": [
@@ -58,31 +43,7 @@
       "name": "Xray Tech",
       "owner": "Brandon",
       "backlog": [
-        { "account": "Global Solutions", "stage": "Qualified", "priority": 1 },
-        { "account": "FinServe Co", "stage": "Discovery", "priority": 2 }
-      ]
-    },
-    {
-      "name": "Pyxis",
-      "owner": "Brandon",
-      "backlog": [
-        { "account": "MidMarket Labs", "stage": "Qualified", "priority": 1 },
-        { "account": "Northwind AI", "stage": "Qualified", "priority": 2 }
-      ]
-    },
-    {
-      "name": "iZeno",
-      "owner": "Michael Shen",
-      "backlog": [
-        { "account": "APAC Retailer", "stage": "Qualified", "priority": 1 },
-        { "account": "DataOps Co", "stage": "Discovery", "priority": 2 }
-      ]
-    },
-    {
-      "name": "Orium (Myplanet)",
-      "owner": "Michael Shen",
-      "backlog": [
-        { "account": "Crossbeam Overlap TBD", "stage": "Qualified", "priority": 1 }
+        { "account": "Global Solutions", "stage": "Qualified", "priority": 1 }
       ]
     },
     {
@@ -93,18 +54,18 @@
   ],
   "recentWins": [],
   "stageCounts": {
-    "Discovery": 2,
+    "Discovery": 1,
     "Qualified": 0,
     "Proposal": 0,
     "Negotiation": 0,
-    "Scoping": 1,
-    "Account Selection": 1
+    "Validation": 1,
+    "Account Selection": 0
   },
   "pipelineTrend": [
     { "date": "2025-12-01", "weighted": 5000 },
     { "date": "2025-12-15", "weighted": 7500 },
-    { "date": "2026-01-01", "weighted": 8500 },
-    { "date": "2026-01-09", "weighted": 10750 }
+    { "date": "2026-01-01", "weighted": 35000 },
+    { "date": "2026-01-11", "weighted": 45000 }
   ],
-  "lastUpdated": "2026-01-11T12:00:00.000Z"
+  "lastUpdated": "2026-01-11T22:30:00.000Z"
 }
