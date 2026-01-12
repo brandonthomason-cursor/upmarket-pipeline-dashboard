@@ -89,11 +89,11 @@ function loadSampleData() {
             {
                 partner: 'iZeno',
                 owner: 'Arvy',
-                account: 'TBD',
+                account: 'APAC Partnership Activation',
                 pipelineStage: '1. Discovery',
                 hubspotStage: 'Qualification',
-                currentState: 'Pending activation. Reviewing potential accounts with Arvy. Singapore time zone presents scheduling challenges.',
-                nextAction: 'Arvy to review submitted account list and prioritize (Due: Jan 17)'
+                currentState: 'Allyce initiated 2026 partnership acceleration. iZeno has Atlassian, Monday, and SugarCRM practices. Key opportunities: (1) Atlassian Data Center migrations - position Zapier to automate workflows, (2) SugarCRM - parsing unstructured emails to populate records. Mark Bruyns asking about Reseller model and co-sell motion.',
+                nextAction: 'Mark meeting with Priska (Monday practice) & Fahad (Atlassian practice) Jan 15; Brandon/Mark co-sell sync Jan 14 SG time; Claudia/Tracy to discuss ConfX CAIASIA event (March) and MDF opportunities'
             }
         ],
         partnerAssisted: [
@@ -128,7 +128,7 @@ function loadSampleData() {
             { date: '2025-12-01', weighted: 5000 },
             { date: '2025-12-15', weighted: 7500 },
             { date: '2026-01-01', weighted: 35000 },
-            { date: '2026-01-11', weighted: 45000 }
+            { date: '2026-01-12', weighted: 42000 }
         ],
         stageCounts: {
             'Discovery': 4,
