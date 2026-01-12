@@ -92,8 +92,8 @@ function loadSampleData() {
                 account: 'APAC Partnership Activation',
                 pipelineStage: '1. Discovery',
                 hubspotStage: 'Qualification',
-                currentState: 'Allyce initiated 2026 partnership acceleration. iZeno has Atlassian, Monday, and SugarCRM practices. Key opportunities: (1) Atlassian Data Center migrations - position Zapier to automate workflows, (2) SugarCRM - parsing unstructured emails to populate records. Mark Bruyns asking about Reseller model and co-sell motion.',
-                nextAction: 'Mark meeting with Priska (Monday practice) & Fahad (Atlassian practice) Jan 15; Brandon/Mark co-sell sync Jan 14 SG time; Claudia/Tracy to discuss ConfX CAIASIA event (March) and MDF opportunities'
+                currentState: '2026 partnership acceleration initiated. iZeno (Singapore-based, APAC coverage) has Atlassian, Monday, and SugarCRM practices. Key opportunities: (1) Atlassian Data Center migrations - position Zapier to automate workflows, (2) SugarCRM - AI-powered email parsing. Arvy leading all co-sell conversations with Mark Bruyns.',
+                nextAction: 'Arvy to join Mark/Priska/Fahad calls (Jan 15) to identify Monday & Atlassian opportunities; Arvy/Mark co-sell sync (Jan 14 SG time); Claudia/Tracy to discuss ConfX CAIASIA event (March)'
             }
         ],
         partnerAssisted: [
