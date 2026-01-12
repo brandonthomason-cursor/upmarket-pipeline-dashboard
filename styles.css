@@ -142,6 +142,10 @@ body {
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .kpi-value {
@@ -152,6 +156,82 @@ body {
 
 .kpi-value.success {
     color: #10b981;
+}
+
+/* Info Icon Styles */
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    color: #94a3b8;
+    cursor: help;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.info-icon:hover {
+    color: #667eea;
+}
+
+/* Native tooltip styling via title attribute - enhanced with CSS */
+.info-icon[title] {
+    position: relative;
+}
+
+.info-icon::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: normal;
+    width: 250px;
+    text-align: left;
+    line-height: 1.5;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 8px;
+}
+
+.info-icon::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1e293b;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    margin-bottom: -4px;
+    z-index: 1001;
+}
+
+.info-icon:hover::after,
+.info-icon:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Hide native tooltip */
+.info-icon:hover[title] {
+    position: relative;
 }
 
 /* ==================== */
@@ -653,6 +733,13 @@ body {
     .charts-grid {
         grid-template-columns: 1fr;
     }
+
+    .info-icon::after {
+        width: 200px;
+        left: auto;
+        right: -10px;
+        transform: none;
+    }
 }
 
 @media (max-width: 768px) {
@@ -684,6 +771,10 @@ body {
 
     .table-container {
         overflow-x: scroll;
+    }
+
+    .info-icon::after {
+        width: 180px;
     }
 }
 
