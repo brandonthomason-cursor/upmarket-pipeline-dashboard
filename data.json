@@ -14,33 +14,6 @@
       "hubspotStage": "Qualification",
       "currentState": "Verbal YES for MCP sales meeting. Brandon to lead train-the-trainer AI bootcamp with Xray Tech and then have them commit to training at least 5 clients with the same material.",
       "nextAction": "Get MCP enablement materials from Chris Ondera; Prep MCP pitch deck using Gamma"
-    },
-    {
-      "partner": "Pyxis",
-      "owner": "Brandon",
-      "account": "TBD",
-      "pipelineStage": "0. Account Selection",
-      "hubspotStage": "Qualification",
-      "currentState": "Selecting target account. Focus on proving co-sell motion with ONE Austin-based account before scaling. MDF budget available for Austin Workflow Lab event.",
-      "nextAction": "Parker to identify Austin-based accounts and whittle to top 3, then pick ONE (Due: Jan 16); Parker to submit MDF form for event"
-    },
-    {
-      "partner": "Orium (Myplanet)",
-      "owner": "Michael Shen",
-      "account": "N/A - Partnership Exploration",
-      "pipelineStage": "0. Account Selection",
-      "hubspotStage": "Qualification",
-      "currentState": "Partnership exploration with 250-person professional services firm (founded 2009). Focus areas: AI orchestration, agent solutions, headless commerce. Enterprise clients include Apple, Steelcase, Fluent, Commerce, Stripe. Markets: US, Canada, LATAM.",
-      "nextAction": "Ryan Kaschak to bring customer examples; Bruce Lee (new AE) to review Crossbeam shared customers (Due: Jan 20); Michael to schedule follow-up (Due: Jan 17)"
-    },
-    {
-      "partner": "iZeno",
-      "owner": "Arvy",
-      "account": "N/A - APAC Partnership Activation",
-      "pipelineStage": "0. Account Selection",
-      "hubspotStage": "Qualification",
-      "currentState": "2026 partnership acceleration initiated. iZeno (Singapore-based, APAC coverage: Malaysia, Indonesia, Thailand, Philippines) has Atlassian, Monday, and SugarCRM practices. Key opportunities: (1) Atlassian Data Center migrations - position Zapier to automate workflows, (2) SugarCRM - AI-powered email parsing. Arvy leading all co-sell conversations with Mark Bruyns.",
-      "nextAction": "Arvy to join Mark/Priska/Fahad calls (Jan 15) to identify Monday & Atlassian opportunities; Arvy/Mark co-sell sync (Jan 14 SG time); Claudia/Tracy to discuss ConfX CAIASIA event (March)"
     }
   ],
   "partnerAssisted": [
@@ -64,11 +37,11 @@
     }
   ],
   "partners": [
-    { "name": "Xray Tech", "owner": "Brandon", "backlog": [] },
-    { "name": "Pyxis", "owner": "Brandon", "backlog": [] },
-    { "name": "iZeno", "owner": "Arvy", "backlog": [] },
-    { "name": "Orium (Myplanet)", "owner": "Michael Shen", "backlog": [] },
-    { "name": "Connex Digital", "owner": "Brandon", "backlog": [] }
+    { "name": "Xray Tech", "owner": "Brandon", "status": "active", "opportunity": "Green Check Verified" },
+    { "name": "Pyxis", "owner": "Brandon", "status": "TBD", "opportunity": null },
+    { "name": "iZeno", "owner": "Arvy", "status": "TBD", "opportunity": null },
+    { "name": "Orium (Myplanet)", "owner": "Michael Shen", "status": "TBD", "opportunity": null },
+    { "name": "Connex Digital", "owner": "Brandon", "status": "active", "opportunity": "LEARN Behavioral" }
   ],
   "recentWins": [],
   "stageCounts": {
@@ -76,8 +49,7 @@
     "Qualified": 0,
     "Proposal": 0,
     "Negotiation": 0,
-    "Validation": 1,
-    "Account Selection": 3
+    "Validation": 1
   },
   "pipelineTrend": [
     { "date": "2025-12-01", "weighted": 5000 },
@@ -85,5 +57,5 @@
     { "date": "2026-01-01", "weighted": 35000 },
     { "date": "2026-01-12", "weighted": 42000 }
   ],
-  "lastUpdated": "2026-01-12T02:45:00.000Z"
+  "lastUpdated": "2026-01-12T13:50:00.000Z"
 }
