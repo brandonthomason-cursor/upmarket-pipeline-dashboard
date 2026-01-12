@@ -13,7 +13,7 @@
       "pipelineStage": "1. Discovery",
       "hubspotStage": "Qualification",
       "currentState": "Verbal YES for MCP sales meeting. Brandon to lead train-the-trainer AI bootcamp with Xray Tech and then have them commit to training at least 5 clients with the same material.",
-      "nextAction": "Get MCP enablement materials from Chris Ondera; Prep MCP pitch deck using Gamma"
+      "nextAction": "Next step Brandon to host AI Bootcamp with Xray Tech. Brandon has already provided Xray Tech with MCP training material. Following training, we will co-present to the client."
     }
   ],
   "partnerAssisted": [
@@ -57,5 +57,5 @@
     { "date": "2026-01-01", "weighted": 35000 },
     { "date": "2026-01-12", "weighted": 42000 }
   ],
-  "lastUpdated": "2026-01-12T13:50:00.000Z"
+  "lastUpdated": "2026-01-12T15:25:00.000Z"
 }
