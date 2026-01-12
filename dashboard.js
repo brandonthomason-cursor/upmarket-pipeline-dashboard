@@ -41,9 +41,7 @@ function loadDashboardData() {
             populatePartnerFilter();
             renderDashboard();
         })
-        .catch(() => {
-            // Keep sample data if fetch fails
-        });
+        .catch(() => {});
 }
 
 function loadNotesData() {
@@ -53,30 +51,49 @@ function loadNotesData() {
             notesData = data;
             renderWeeklyUpdates();
         })
-        .catch(() => {
-            // Keep embedded notes if fetch fails
-        });
+        .catch(() => {});
 }
 
 function loadSampleData() {
     dashboardData = {
         quarterlyTarget: 20000,
-        summary: {
-            closedWon: 0,
-            activeCount: 2,
-            weightedPipeline: 45000
-        },
+        summary: { closedWon: 0, activeCount: 5, weightedPipeline: 42000 },
         partnerSourced: [
             {
                 partner: 'Xray Tech',
                 owner: 'Brandon',
                 account: 'Green Check Verified',
-                stage: 'Discovery',
-                dealSize: 12000,
-                weightedValue: 3000,
-                lastActivity: '2026-01-09',
-                nextAction: 'Prep MCP pitch deck, get enablement from Chris Ondera',
-                status: 'Verbal YES for MCP sales meeting'
+                pipelineStage: '1. Discovery',
+                hubspotStage: 'Qualification',
+                currentState: 'Verbal YES for MCP sales meeting. Brandon to lead train-the-trainer AI bootcamp with Xray Tech and then have them commit to training at least 5 clients with the same material.',
+                nextAction: 'Get MCP enablement materials from Chris Ondera; Prep MCP pitch deck using Gamma'
+            },
+            {
+                partner: 'Pyxis',
+                owner: 'Brandon',
+                account: 'TBD',
+                pipelineStage: '1. Discovery',
+                hubspotStage: 'Qualification',
+                currentState: 'Selecting target account. Focus on proving co-sell motion with ONE Austin-based account before scaling.',
+                nextAction: 'Parker to identify Austin-based accounts (Due: Jan 16)'
+            },
+            {
+                partner: 'Orium (Myplanet)',
+                owner: 'Michael Shen',
+                account: 'Partnership Activation',
+                pipelineStage: '1. Discovery',
+                hubspotStage: 'Qualification',
+                currentState: 'Partnership exploration with 250-person professional services firm. Focus areas: AI orchestration, agent solutions, headless commerce.',
+                nextAction: 'Ryan to bring customer examples; Bruce Lee to review Crossbeam (Due: Jan 20)'
+            },
+            {
+                partner: 'iZeno',
+                owner: 'Arvy',
+                account: 'TBD',
+                pipelineStage: '1. Discovery',
+                hubspotStage: 'Qualification',
+                currentState: 'Pending activation. Reviewing potential accounts with Arvy. Singapore time zone presents scheduling challenges.',
+                nextAction: 'Arvy to review submitted account list and prioritize (Due: Jan 17)'
             }
         ],
         partnerAssisted: [
@@ -101,6 +118,9 @@ function loadSampleData() {
         ],
         partners: [
             { name: 'Xray Tech', owner: 'Brandon', backlog: [] },
+            { name: 'Pyxis', owner: 'Brandon', backlog: [] },
+            { name: 'iZeno', owner: 'Arvy', backlog: [] },
+            { name: 'Orium (Myplanet)', owner: 'Michael Shen', backlog: [] },
             { name: 'Connex Digital', owner: 'Brandon', backlog: [] }
         ],
         recentWins: [],
@@ -111,7 +131,7 @@ function loadSampleData() {
             { date: '2026-01-11', weighted: 45000 }
         ],
         stageCounts: {
-            'Discovery': 1,
+            'Discovery': 4,
             'Qualified': 0,
             'Proposal': 0,
             'Negotiation': 0,
@@ -181,10 +201,9 @@ function populatePartnerFilter() {
 
 function applyFilters(items, type = 'opp') {
     if (!items) return [];
-    
     return items.filter(item => {
         if (filters.partner && item.partner !== filters.partner) return false;
-        if (filters.stage && item.stage !== filters.stage) return false;
+        if (filters.stage && item.stage !== filters.stage && item.pipelineStage !== filters.stage) return false;
         if (filters.dateFrom && item.lastActivity) {
             if (new Date(item.lastActivity) < new Date(filters.dateFrom)) return false;
         }
@@ -227,7 +246,7 @@ function renderKPIs() {
     const assistedOpps = applyFilters(dashboardData.partnerAssisted || []);
     const allOpps = [...sourcedOpps, ...assistedOpps];
     
-    const weighted = allOpps.reduce((sum, o) => sum + (o.weightedValue || 0), 0);
+    const weighted = assistedOpps.reduce((sum, o) => sum + (o.weightedValue || 0), 0);
     const activeCount = allOpps.length;
     const closed = computeClosedWon();
     const coverage = target > 0 ? ((closed + weighted) / target).toFixed(2) : '0.00';
@@ -253,28 +272,30 @@ function renderPartnerSourced() {
 
     opps.forEach(opp => {
         const card = document.createElement('div');
-        card.className = 'opp-card';
+        card.className = 'opp-card sourced';
+        
+        const stageBadge = opp.pipelineStage ? 
+            `<span class="pipeline-stage-badge">${opp.pipelineStage}</span>` : '';
+        
         card.innerHTML = `
-            <div class="opp-card-header">
-                <span class="opp-partner">${opp.partner} &bull; ${opp.owner}</span>
-                <span class="opp-stage">${opp.stage}</span>
+            <div class="opp-card-header-v2">
+                <div class="opp-partner-info">
+                    <div class="opp-partner-label">Partner: <span class="opp-partner-name">${opp.partner}</span></div>
+                    <div class="opp-manager-label">Partner Manager: <span class="opp-manager-name">${opp.owner}</span></div>
+                </div>
+                ${stageBadge}
             </div>
-            <div class="opp-account">${opp.account}</div>
-            <div class="opp-metrics">
-                <div class="opp-metric">
-                    <span class="opp-metric-label">Deal Size</span>
-                    <span class="opp-metric-value">${formatCurrency(opp.dealSize)}</span>
-                </div>
-                <div class="opp-metric">
-                    <span class="opp-metric-label">Weighted</span>
-                    <span class="opp-metric-value">${formatCurrency(opp.weightedValue)}</span>
-                </div>
-                <div class="opp-metric">
-                    <span class="opp-metric-label">Last Activity</span>
-                    <span class="opp-metric-value">${formatDate(opp.lastActivity)}</span>
-                </div>
+            <div class="opp-opportunity-label">Partner Opportunity:</div>
+            <div class="opp-account-name">${opp.account}</div>
+            <div class="opp-pipeline-stage">
+                <span class="stage-label">Pipeline Stage:</span>
+                <span class="stage-value">${opp.pipelineStage || opp.stage}</span>
+                ${opp.hubspotStage ? `<span class="hubspot-stage">(HubSpot: ${opp.hubspotStage})</span>` : ''}
             </div>
-            <div class="opp-details">${opp.status}</div>
+            <div class="opp-current-state">
+                <span class="state-label">Current State of Opportunity:</span>
+                <div class="state-value">${opp.currentState || opp.status}</div>
+            </div>
             <div class="opp-next-action"><strong>Next:</strong> ${opp.nextAction}</div>
         `;
         container.appendChild(card);
@@ -297,7 +318,6 @@ function renderPartnerAssisted() {
         const card = document.createElement('div');
         card.className = 'opp-card assisted';
         
-        // Build PSF investment section if applicable
         let psfSection = '';
         if (opp.psfInvestment) {
             psfSection = `
@@ -311,7 +331,6 @@ function renderPartnerAssisted() {
             `;
         }
         
-        // Build deal owner/forecast section
         let dealInfoSection = '';
         if (opp.dealOwner || opp.forecastCategory) {
             dealInfoSection = `
@@ -323,7 +342,6 @@ function renderPartnerAssisted() {
             `;
         }
         
-        // Build context section
         let contextSection = '';
         if (opp.context) {
             contextSection = `<div class="opp-context">${opp.context}</div>`;
