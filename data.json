@@ -2,7 +2,7 @@
   "quarterlyTarget": 20000,
   "summary": {
     "closedWon": 0,
-    "activeCount": 5,
+    "activeCount": 1,
     "weightedPipeline": 42000
   },
   "partnerSourced": [
@@ -85,5 +85,5 @@
     { "date": "2026-01-01", "weighted": 35000 },
     { "date": "2026-01-12", "weighted": 42000 }
   ],
-  "lastUpdated": "2026-01-12T02:30:00.000Z"
+  "lastUpdated": "2026-01-12T02:45:00.000Z"
 }
