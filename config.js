@@ -10,7 +10,8 @@ const CONFIG = {
     USE_STATIC_DATA: true,
     
     // Static data file path (use absolute URL for Coda embed)
-    DATA_FILE: 'https://brandonthomason-cursor.github.io/upmarket-pipeline-dashboard/data.json?v=2026-01-02-01',
+    // Version parameter busts browser cache when data is updated
+    DATA_FILE: 'https://brandonthomason-cursor.github.io/upmarket-pipeline-dashboard/data.json?v=2026-01-12-02',
     
     // Fallback to sample data if API/data.json fails
     USE_SAMPLE_DATA_ON_ERROR: true,
@@ -27,4 +28,3 @@ const CONFIG = {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CONFIG;
 }
-
