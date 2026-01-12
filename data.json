@@ -2,20 +2,45 @@
   "quarterlyTarget": 20000,
   "summary": {
     "closedWon": 0,
-    "activeCount": 2,
-    "weightedPipeline": 45000
+    "activeCount": 5,
+    "weightedPipeline": 42000
   },
   "partnerSourced": [
     {
       "partner": "Xray Tech",
       "owner": "Brandon",
       "account": "Green Check Verified",
-      "stage": "Discovery",
-      "dealSize": 12000,
-      "weightedValue": 3000,
-      "lastActivity": "2026-01-09",
-      "nextAction": "Prep MCP pitch deck, get enablement from Chris Ondera",
-      "status": "Verbal YES for MCP sales meeting"
+      "pipelineStage": "1. Discovery",
+      "hubspotStage": "Qualification",
+      "currentState": "Verbal YES for MCP sales meeting. Brandon to lead train-the-trainer AI bootcamp with Xray Tech and then have them commit to training at least 5 clients with the same material.",
+      "nextAction": "Get MCP enablement materials from Chris Ondera; Prep MCP pitch deck using Gamma"
+    },
+    {
+      "partner": "Pyxis",
+      "owner": "Brandon",
+      "account": "TBD",
+      "pipelineStage": "0. Account Selection",
+      "hubspotStage": "Qualification",
+      "currentState": "Selecting target account. Focus on proving co-sell motion with ONE Austin-based account before scaling. MDF budget available for Austin Workflow Lab event.",
+      "nextAction": "Parker to identify Austin-based accounts and whittle to top 3, then pick ONE (Due: Jan 16); Parker to submit MDF form for event"
+    },
+    {
+      "partner": "Orium (Myplanet)",
+      "owner": "Michael Shen",
+      "account": "N/A - Partnership Exploration",
+      "pipelineStage": "0. Account Selection",
+      "hubspotStage": "Qualification",
+      "currentState": "Partnership exploration with 250-person professional services firm (founded 2009). Focus areas: AI orchestration, agent solutions, headless commerce. Enterprise clients include Apple, Steelcase, Fluent, Commerce, Stripe. Markets: US, Canada, LATAM.",
+      "nextAction": "Ryan Kaschak to bring customer examples; Bruce Lee (new AE) to review Crossbeam shared customers (Due: Jan 20); Michael to schedule follow-up (Due: Jan 17)"
+    },
+    {
+      "partner": "iZeno",
+      "owner": "Arvy",
+      "account": "N/A - APAC Partnership Activation",
+      "pipelineStage": "0. Account Selection",
+      "hubspotStage": "Qualification",
+      "currentState": "2026 partnership acceleration initiated. iZeno (Singapore-based, APAC coverage: Malaysia, Indonesia, Thailand, Philippines) has Atlassian, Monday, and SugarCRM practices. Key opportunities: (1) Atlassian Data Center migrations - position Zapier to automate workflows, (2) SugarCRM - AI-powered email parsing. Arvy leading all co-sell conversations with Mark Bruyns.",
+      "nextAction": "Arvy to join Mark/Priska/Fahad calls (Jan 15) to identify Monday & Atlassian opportunities; Arvy/Mark co-sell sync (Jan 14 SG time); Claudia/Tracy to discuss ConfX CAIASIA event (March)"
     }
   ],
   "partnerAssisted": [
@@ -28,29 +53,22 @@
       "weightedValue": 42000,
       "probability": 70,
       "lastActivity": "2026-01-05",
-      "nextAction": "MSA + Order Form iteration with LEARN's counsel; CHRO final approval on contract language",
+      "nextAction": "MSA + Order Form iteration with LEARN counsel; CHRO final approval",
       "status": "Legal redlines in progress",
       "psfInvestment": 5000,
       "psfHours": 20,
-      "psfDetails": "RyRo-approved exception: $5k SOW (~20 hrs) for Phase 1 UKG Pro integration. Connex builds private UKG Pro connector + new-hire workflow in sandbox.",
+      "psfDetails": "RyRo-approved exception: $5k SOW (~20 hrs) for Phase 1 UKG Pro integration. Connex builds private UKG Pro connector + new-hire workflow.",
       "dealOwner": "Jaime Crespo",
       "forecastCategory": "Commit",
-      "context": "Net-new $60k Enterprise opportunity. Connex is delivery partner for Phase 1 UKG Pro integration. Normal PSF cap ($1k) waived given deal size and critical UKG integration gap."
+      "context": "Net-new $60k Enterprise opportunity. Normal PSF cap ($1k) waived given deal size and critical UKG integration gap."
     }
   ],
   "partners": [
-    {
-      "name": "Xray Tech",
-      "owner": "Brandon",
-      "backlog": [
-        { "account": "Global Solutions", "stage": "Qualified", "priority": 1 }
-      ]
-    },
-    {
-      "name": "Connex Digital",
-      "owner": "Brandon",
-      "backlog": []
-    }
+    { "name": "Xray Tech", "owner": "Brandon", "backlog": [] },
+    { "name": "Pyxis", "owner": "Brandon", "backlog": [] },
+    { "name": "iZeno", "owner": "Arvy", "backlog": [] },
+    { "name": "Orium (Myplanet)", "owner": "Michael Shen", "backlog": [] },
+    { "name": "Connex Digital", "owner": "Brandon", "backlog": [] }
   ],
   "recentWins": [],
   "stageCounts": {
@@ -59,13 +77,13 @@
     "Proposal": 0,
     "Negotiation": 0,
     "Validation": 1,
-    "Account Selection": 0
+    "Account Selection": 3
   },
   "pipelineTrend": [
     { "date": "2025-12-01", "weighted": 5000 },
     { "date": "2025-12-15", "weighted": 7500 },
     { "date": "2026-01-01", "weighted": 35000 },
-    { "date": "2026-01-11", "weighted": 45000 }
+    { "date": "2026-01-12", "weighted": 42000 }
   ],
-  "lastUpdated": "2026-01-11T22:30:00.000Z"
+  "lastUpdated": "2026-01-12T02:30:00.000Z"
 }
