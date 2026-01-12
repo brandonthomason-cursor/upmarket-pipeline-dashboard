@@ -27,17 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==================== //
 
 function loadDashboardData() {
-    const apiUrl = typeof CONFIG !== 'undefined' && CONFIG.API_URL ? CONFIG.API_URL : null;
-    const useStatic = typeof CONFIG !== 'undefined' && CONFIG.USE_STATIC_DATA;
-    const dataFile = typeof CONFIG !== 'undefined' && CONFIG.DATA_FILE ? CONFIG.DATA_FILE : 'data.json';
+    const dataFile = typeof DASHBOARD_CONFIG !== 'undefined' && DASHBOARD_CONFIG.DATA_FILE ? DASHBOARD_CONFIG.DATA_FILE : 'data.json';
 
-    if (!apiUrl && !useStatic) return;
-
-    const source = useStatic ? dataFile : apiUrl;
-    fetch(source)
+    fetch(dataFile)
         .then(r => r.ok ? r.json() : Promise.reject())
         .then(data => {
-            dashboardData = { ...dashboardData, ...data };
+            dashboardData = data;
             populatePartnerFilter();
             renderDashboard();
         })
@@ -45,7 +40,9 @@ function loadDashboardData() {
 }
 
 function loadNotesData() {
-    fetch('notes.json')
+    const notesFile = typeof DASHBOARD_CONFIG !== 'undefined' && DASHBOARD_CONFIG.NOTES_FILE ? DASHBOARD_CONFIG.NOTES_FILE : 'notes.json';
+    
+    fetch(notesFile)
         .then(r => r.ok ? r.json() : Promise.reject())
         .then(data => {
             notesData = data;
@@ -57,7 +54,7 @@ function loadNotesData() {
 function loadSampleData() {
     dashboardData = {
         quarterlyTarget: 20000,
-        summary: { closedWon: 0, activeCount: 5, weightedPipeline: 42000 },
+        summary: { closedWon: 0, activeCount: 1, weightedPipeline: 42000 },
         partnerSourced: [
             {
                 partner: 'Xray Tech',
@@ -66,34 +63,7 @@ function loadSampleData() {
                 pipelineStage: '1. Discovery',
                 hubspotStage: 'Qualification',
                 currentState: 'Verbal YES for MCP sales meeting. Brandon to lead train-the-trainer AI bootcamp with Xray Tech and then have them commit to training at least 5 clients with the same material.',
-                nextAction: 'Get MCP enablement materials from Chris Ondera; Prep MCP pitch deck using Gamma'
-            },
-            {
-                partner: 'Pyxis',
-                owner: 'Brandon',
-                account: 'TBD',
-                pipelineStage: '1. Discovery',
-                hubspotStage: 'Qualification',
-                currentState: 'Selecting target account. Focus on proving co-sell motion with ONE Austin-based account before scaling.',
-                nextAction: 'Parker to identify Austin-based accounts (Due: Jan 16)'
-            },
-            {
-                partner: 'Orium (Myplanet)',
-                owner: 'Michael Shen',
-                account: 'Partnership Activation',
-                pipelineStage: '1. Discovery',
-                hubspotStage: 'Qualification',
-                currentState: 'Partnership exploration with 250-person professional services firm. Focus areas: AI orchestration, agent solutions, headless commerce.',
-                nextAction: 'Ryan to bring customer examples; Bruce Lee to review Crossbeam (Due: Jan 20)'
-            },
-            {
-                partner: 'iZeno',
-                owner: 'Arvy',
-                account: 'APAC Partnership Activation',
-                pipelineStage: '1. Discovery',
-                hubspotStage: 'Qualification',
-                currentState: '2026 partnership acceleration initiated. iZeno (Singapore-based, APAC coverage) has Atlassian, Monday, and SugarCRM practices. Key opportunities: (1) Atlassian Data Center migrations - position Zapier to automate workflows, (2) SugarCRM - AI-powered email parsing. Arvy leading all co-sell conversations with Mark Bruyns.',
-                nextAction: 'Arvy to join Mark/Priska/Fahad calls (Jan 15) to identify Monday & Atlassian opportunities; Arvy/Mark co-sell sync (Jan 14 SG time); Claudia/Tracy to discuss ConfX CAIASIA event (March)'
+                nextAction: 'Next step Brandon to host AI Bootcamp with Xray Tech. Brandon has already provided Xray Tech with MCP training material. Following training, we will co-present to the client.'
             }
         ],
         partnerAssisted: [
@@ -117,11 +87,11 @@ function loadSampleData() {
             }
         ],
         partners: [
-            { name: 'Xray Tech', owner: 'Brandon', backlog: [] },
-            { name: 'Pyxis', owner: 'Brandon', backlog: [] },
-            { name: 'iZeno', owner: 'Arvy', backlog: [] },
-            { name: 'Orium (Myplanet)', owner: 'Michael Shen', backlog: [] },
-            { name: 'Connex Digital', owner: 'Brandon', backlog: [] }
+            { name: 'Xray Tech', owner: 'Brandon', status: 'active', opportunity: 'Green Check Verified' },
+            { name: 'Pyxis', owner: 'Brandon', status: 'TBD', opportunity: null },
+            { name: 'iZeno', owner: 'Arvy', status: 'TBD', opportunity: null },
+            { name: 'Orium (Myplanet)', owner: 'Michael Shen', status: 'TBD', opportunity: null },
+            { name: 'Connex Digital', owner: 'Brandon', status: 'active', opportunity: 'LEARN Behavioral' }
         ],
         recentWins: [],
         pipelineTrend: [
@@ -131,12 +101,11 @@ function loadSampleData() {
             { date: '2026-01-12', weighted: 42000 }
         ],
         stageCounts: {
-            'Discovery': 4,
+            'Discovery': 1,
             'Qualified': 0,
             'Proposal': 0,
             'Negotiation': 0,
-            'Validation': 1,
-            'Account Selection': 0
+            'Validation': 1
         },
         lastUpdated: new Date().toISOString()
     };
@@ -242,12 +211,11 @@ function updateLastUpdated(ts) {
 
 function renderKPIs() {
     const target = dashboardData.quarterlyTarget || 0;
-    const sourcedOpps = applyFilters(dashboardData.partnerSourced || []);
     const assistedOpps = applyFilters(dashboardData.partnerAssisted || []);
-    const allOpps = [...sourcedOpps, ...assistedOpps];
     
     const weighted = assistedOpps.reduce((sum, o) => sum + (o.weightedValue || 0), 0);
-    const activeCount = allOpps.length;
+    // Active Opps = only actual deals (partner assisted), not pipeline building activities
+    const activeCount = assistedOpps.length;
     const closed = computeClosedWon();
     const coverage = target > 0 ? ((closed + weighted) / target).toFixed(2) : '0.00';
 
@@ -418,7 +386,7 @@ function renderFunnelChart() {
     if (!ctx) return;
 
     const stageCounts = dashboardData.stageCounts || {};
-    const stages = ['Discovery', 'Qualified', 'Proposal', 'Negotiation', 'Validation', 'Account Selection'];
+    const stages = ['Discovery', 'Qualified', 'Proposal', 'Negotiation', 'Validation'];
     const counts = stages.map(s => stageCounts[s] || 0);
 
     if (funnelChart) funnelChart.destroy();
@@ -435,8 +403,7 @@ function renderFunnelChart() {
                     'rgba(118, 75, 162, 0.8)',
                     'rgba(16, 185, 129, 0.8)',
                     'rgba(245, 158, 11, 0.8)',
-                    'rgba(59, 130, 246, 0.8)',
-                    'rgba(147, 51, 234, 0.8)'
+                    'rgba(59, 130, 246, 0.8)'
                 ],
                 borderRadius: 6
             }]
