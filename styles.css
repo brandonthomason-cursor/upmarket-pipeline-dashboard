@@ -175,7 +175,7 @@ body {
 
 .opps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 16px;
 }
 
@@ -198,6 +198,120 @@ body {
     background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
 }
 
+.opp-card.sourced {
+    border-left-color: #667eea;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+}
+
+/* V2 Card Header - Partner Info */
+.opp-card-header-v2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.opp-partner-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.opp-partner-label,
+.opp-manager-label {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.opp-partner-name,
+.opp-manager-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.pipeline-stage-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #e0e7ff;
+    color: #3730a3;
+    white-space: nowrap;
+}
+
+/* Opportunity Label and Name */
+.opp-opportunity-label {
+    font-size: 12px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.opp-account-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+/* Pipeline Stage Display */
+.opp-pipeline-stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    border-radius: 6px;
+}
+
+.stage-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.stage-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #3730a3;
+}
+
+.hubspot-stage {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Current State of Opportunity */
+.opp-current-state {
+    margin-bottom: 16px;
+}
+
+.state-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.state-value {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+    padding: 10px 12px;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    border-radius: 0 6px 6px 0;
+}
+
+/* Legacy styles for backwards compatibility */
 .opp-card-header {
     display: flex;
     justify-content: space-between;
