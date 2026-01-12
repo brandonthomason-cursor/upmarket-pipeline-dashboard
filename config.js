@@ -1,30 +1,12 @@
 // Dashboard Configuration
-// Option 2: GitHub Pages + GitHub Actions (FREE - No paid hosting needed!)
-
-const CONFIG = {
-    // Option 1: External API endpoint (requires paid hosting)
-    // API_URL: 'https://your-api.railway.app/api/dashboard-data',
+const DASHBOARD_CONFIG = {
+    // Data source - use relative path for GitHub Pages
+    DATA_FILE: 'data.json?v=2026-01-12-03',
+    NOTES_FILE: 'notes.json?v=2026-01-12-01',
     
-    // Option 2: Use static data.json file (FREE - GitHub Actions updates it)
-    // Set to true to use GitHub Actions (recommended - completely free!)
-    USE_STATIC_DATA: true,
+    // Refresh interval in milliseconds (5 minutes)
+    REFRESH_INTERVAL: 300000,
     
-    // Static data file path (use absolute URL for Coda embed)
-    // Version parameter busts browser cache when data is updated
-    DATA_FILE: 'https://brandonthomason-cursor.github.io/upmarket-pipeline-dashboard/data.json?v=2026-01-12-02',
-    
-    // Fallback to sample data if API/data.json fails
-    USE_SAMPLE_DATA_ON_ERROR: true,
-    
-    // Refresh interval (milliseconds)
-    // Set to 0 to disable auto-refresh
-    AUTO_REFRESH_INTERVAL: 0, // 0 = disabled, 300000 = 5 minutes
-    
-    // Coda embed mode (auto-detected, but can be forced)
-    FORCE_CODA_MODE: false
+    // Enable auto-refresh
+    AUTO_REFRESH: true
 };
-
-// Export for use in dashboard.js
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CONFIG;
-}
