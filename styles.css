@@ -176,7 +176,7 @@ body {
     color: #667eea;
 }
 
-/* Native tooltip styling via title attribute - enhanced with CSS */
+/* Tooltip styling - opens DOWNWARD to avoid header overlap */
 .info-icon[title] {
     position: relative;
 }
@@ -184,7 +184,7 @@ body {
 .info-icon::after {
     content: attr(title);
     position: absolute;
-    bottom: 100%;
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     background: #1e293b;
@@ -205,21 +205,21 @@ body {
     pointer-events: none;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-bottom: 8px;
+    margin-top: 8px;
 }
 
 .info-icon::before {
     content: '';
     position: absolute;
-    bottom: 100%;
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     border: 6px solid transparent;
-    border-top-color: #1e293b;
+    border-bottom-color: #1e293b;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s, visibility 0.2s;
-    margin-bottom: -4px;
+    margin-top: -4px;
     z-index: 1001;
 }
 
